@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Api;
 
+use App\Models\Auth;
 use CodeIgniter\RESTful\ResourceController;
 
 class Users extends ResourceController
@@ -16,7 +17,7 @@ class Users extends ResourceController
     public function index()
     {
         //
-        if(!$response = $this->model->findAll()){
+        if (!$response = $this->model->findAll()) {
             $this->failNotFound();
         }
         return $this->respond(['data' => $response]);
@@ -79,6 +80,22 @@ class Users extends ResourceController
      */
     public function delete($id = null)
     {
-        //
+        try {
+            if (!$user = $this->model->find($id)) {
+                return $this->failNotFound();
+            }
+            $authModel = new Auth();
+            if (!$authModel->delete($user->auth_id)) {
+                return $this->failValidationErrors($authModel->ListErrors());
+            }
+
+            $authModel->purgeDeleted();
+            return $this->respond(array(
+                'message'    => 'Deleted'
+            ));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->failServerError();
+        }
     }
 }
