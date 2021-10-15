@@ -33,19 +33,19 @@ class Auth extends ResourceController
             ]
         ];
         if (!$this->validate($rules, $messages)) {
-            return $this->failValidationErrors($this->validator->getErrors());
+            return $this->failValidationErrors($this->validator->listErrors('custom'));
         }
         $userModel  = new UsersModel();
         $userEntity = new UsersEntity();
         $authEntity = new EntitiesAuth();
         $authEntity->fill($this->request->getPost(['username', 'email', 'password']));
         if (!$this->model->save($authEntity)) {
-            return $this->failValidationErrors($this->model->getErrors());
+            return $this->failValidationErrors($this->model->listErrors('custom'));
         }
         $userEntity->fill($this->request->getPost(['name', 'surname']));
         $userEntity->fill(['auth_id' => $this->model->insertID()]);
         if (!$userModel->save($userEntity)) {
-            return $this->failValidationErrors($userModel->getErrors());
+            return $this->failValidationErrors($userModel->listErrors('custom'));
         }
         $user = $userModel->find($userModel->insertID());
         return $this->respondCreated([
