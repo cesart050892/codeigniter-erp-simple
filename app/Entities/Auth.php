@@ -13,4 +13,10 @@ class Auth extends Entity
         'deleted_at',
     ];
     protected $casts   = [];
+
+    protected function setPassword(string $password)
+    {
+        $this->attributes['password'] = password_hash($password, PASSWORD_BCRYPT);
+        return $this;
+    }
 }

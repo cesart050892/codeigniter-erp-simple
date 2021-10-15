@@ -37,7 +37,6 @@ $routes->get('/', 'Home::index');
 
 $routes->group('api', ['namespace' => $API], function($routes){
     $routes->resource('rols');
-    $routes->resource('credentials');
     $routes->resource('users');
 });
 

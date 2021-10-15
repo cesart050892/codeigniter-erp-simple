@@ -6,6 +6,8 @@ use CodeIgniter\RESTful\ResourceController;
 
 class Users extends ResourceController
 {
+    protected $modelName = 'App\Models\Users';
+
     /**
      * Return an array of resource objects, themselves in array format
      *
@@ -14,6 +16,10 @@ class Users extends ResourceController
     public function index()
     {
         //
+        if(!$response = $this->model->findAll()){
+            $this->failNotFound();
+        }
+        return $this->respond(['data' => $response]);
     }
 
     /**

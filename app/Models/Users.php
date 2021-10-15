@@ -14,7 +14,17 @@ class Users extends Model
     protected $returnType           = \App\Entities\Users::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
-    protected $allowedFields        = [];
+    protected $allowedFields        = [
+        'name',
+        'surname',
+        'photo',
+        'address',
+        'phone',
+        'state',
+        'last_login',
+        'auth_id',
+        'rol_id',
+    ];
 
     // Dates
     protected $useTimestamps        = true;

@@ -14,7 +14,12 @@ class Auth extends Model
     protected $returnType           = \App\Entities\Auth::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
-    protected $allowedFields        = [];
+    protected $allowedFields        = [
+        'email', 
+        'username',
+        'password',
+        'token'
+    ];
 
     // Dates
     protected $useTimestamps        = true;

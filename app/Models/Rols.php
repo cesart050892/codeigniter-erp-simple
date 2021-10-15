@@ -14,7 +14,7 @@ class Rols extends Model
     protected $returnType           = \App\Entities\Rols::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
-    protected $allowedFields        = [];
+    protected $allowedFields        = ['rol'];
 
     // Dates
     protected $useTimestamps        = true;

@@ -10,7 +10,7 @@ class Init extends Seeder
 	{
 		//
 		$this->call('App\Database\Seeds\Data\Rols');
-		$this->call('App\Database\Seeds\Data\Credentials');
+		$this->call('App\Database\Seeds\Data\Auth');
 		$this->call('App\Database\Seeds\Data\Users');
 	}
 }

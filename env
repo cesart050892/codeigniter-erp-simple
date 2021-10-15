@@ -16,7 +16,7 @@
 
 # CI_ENVIRONMENT = production
 
-# CI_ENVIRONMENT = production
+# CI_ENVIRONMENT = development
 
 #--------------------------------------------------------------------
 # APP
@@ -42,8 +42,8 @@
 #--------------------------------------------------------------------
 
 # database.default.hostname = localhost
-# database.default.database = ci4
-# database.default.username = erp-ci
+# database.default.database = erp_ci
+# database.default.username = root
 # database.default.password = 
 # database.default.DBDriver = MySQLi
 # database.default.DBPrefix =
