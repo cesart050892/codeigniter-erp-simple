@@ -33,9 +33,10 @@ class Validation
      * @var array<string, string>
      */
     public $templates = [
-        'list'   => 'CodeIgniter\Validation\Views\list',
-        'single' => 'CodeIgniter\Validation\Views\single',
-        'custom' => 'errors\utils\errors',
+        '_list'   => 'CodeIgniter\Validation\Views\list',
+        '_single' => 'CodeIgniter\Validation\Views\single',
+        'list' => 'errors\validation\list',
+        'single' => 'errors\validation\single',
     ];
 
     //--------------------------------------------------------------------
