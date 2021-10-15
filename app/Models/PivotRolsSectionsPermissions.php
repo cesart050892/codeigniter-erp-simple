@@ -39,4 +39,21 @@ class PivotRolsSectionsPermissions extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    public function getOne($id)
+    {
+        return $this->select('
+            pivot_rols_sections_permissions.id,
+            users.id AS `user`,
+            rols.rol,
+            permissions.permission,
+            sections.section
+        ')
+            ->join('rols', 'pivot_rols_sections_permissions.rol_id = rols.id')
+            ->join('permissions', 'pivot_rols_sections_permissions.permission_id = permissions.id')
+            ->join('sections', 'pivot_rols_sections_permissions.section_id = sections.id')
+            ->join('users', 'rols.id = users.rol_id')
+            ->where('users.id', $id)
+            ->findAll();
+    }
 }
