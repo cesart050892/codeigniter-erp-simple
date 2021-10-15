@@ -35,13 +35,14 @@ $routes->setAutoRoute(false);
 $routes->get('/', 'Home::index');
 
 
-$routes->group('api', ['namespace' => $API], function ($routes) {
+$routes->group('api', ['namespace' => $API, []], function ($routes) {
     $routes->group('auth', function ($routes) {
         $routes->post('signup', 'Auth::store');
         $routes->post('login', 'Auth::login');
+        $routes->get('logout','Auth::logout', ['filter' => 'api']);
     });
-    $routes->resource('rols');
-    $routes->resource('users');
+    $routes->resource('rols', ['filter' => 'api']);
+    $routes->resource('users', ['filter' => 'api']);
 });
 
 /*

@@ -56,7 +56,6 @@ class Auth extends ResourceController
 
     public function login()
     {
-        $session = session();
         $userModel = new UsersModel();
         $username = $this->request->getPost('username', FILTER_SANITIZE_STRING);
         $password = $this->request->getPost('password', FILTER_SANITIZE_STRING);
@@ -68,18 +67,40 @@ class Auth extends ResourceController
             return $this->failNotFound('Password is incorrect.');
         }
         $user = $userModel->where('auth_id', $auth->id)->first();
-        $session_data = [
-            'id' => $user->id,
+        $data = [
             'name' => "{$user->name} {$user->surname}",
             'email' => $auth->email,
-            'isLoggedIn' => TRUE
         ];
-        $session->set($session_data);
-        unset($session_data['id']);
-        unset($session_data['isLoggedIn']);
+        if (!$this->setSession($user, $auth)) {
+            return $this->failServerError();
+        };
         return $this->respond([
             'message'   => 'logged in',
-            'data'      => $session_data
+            'data'      => $data
+        ]);
+    }
+
+    private function setSession($user, $auth)
+    {
+        if ($user && $auth) {
+            $data = [
+                'id' => $user->id,
+                'name' => "{$user->name} {$user->surname}",
+                'email' => $auth->email,
+                'isLoggedIn' => TRUE
+            ];
+            session()->set($data);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return $this->respond([
+            'message'   => 'logout'
         ]);
     }
 }

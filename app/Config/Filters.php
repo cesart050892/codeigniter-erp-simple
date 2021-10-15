@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Filters\Api;
+use App\Filters\Cors;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -16,9 +18,11 @@ class Filters extends BaseConfig
      * @var array
      */
     public $aliases = [
-        'csrf'     => CSRF::class,
-        'toolbar'  => DebugToolbar::class,
-        'honeypot' => Honeypot::class,
+        'csrf'      => CSRF::class,
+        'toolbar'   => DebugToolbar::class,
+        'honeypot'  => Honeypot::class,
+        'cors'      => Cors::class,
+        'api'       => Api::class
     ];
 
     /**
@@ -30,7 +34,8 @@ class Filters extends BaseConfig
     public $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
+            'csrf' => ['except' => 'api/*'],
+            'cors'
         ],
         'after' => [
             'toolbar',
