@@ -15,12 +15,24 @@ class Auth extends ResourceController
     {
         $rules = [
             'name'              => 'required|min_length[2]|max_length[50]',
+            'surname'           => 'required|min_length[2]|max_length[50]',
             'username'          => 'required|min_length[2]|max_length[50]',
             'email'             => 'required|min_length[4]|max_length[100]|valid_email|is_unique[auth.email]',
             'password'          => 'required|min_length[4]|max_length[50]',
             'confirm_password'  => 'required|matches[password]'
         ];
-        if (!$this->validate($rules)) {
+        $messages =     [
+            'username' => [
+                'required' => 'All accounts must have {field} provided',
+            ],
+            'password' => [
+                'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
+            ],
+            'surname' => [
+                'required' => 'All accounts must have {field} provided'
+            ]
+        ];
+        if (!$this->validate($rules, $messages)) {
             return $this->failValidationErrors($this->validator->getErrors());
         }
         $userModel  = new UsersModel();
@@ -30,7 +42,7 @@ class Auth extends ResourceController
         if (!$this->model->save($authEntity)) {
             return $this->failValidationErrors($this->model->getErrors());
         }
-        $userEntity->fill($this->request->getPost(['name']));
+        $userEntity->fill($this->request->getPost(['name', 'surname']));
         $userEntity->fill(['auth_id' => $this->model->insertID()]);
         if (!$userModel->save($userEntity)) {
             return $this->failValidationErrors($userModel->getErrors());
