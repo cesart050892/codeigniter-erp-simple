@@ -16,9 +16,13 @@
 
 # CI_ENVIRONMENT = production
 
+# CI_ENVIRONMENT = production
+
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
+
+# app.baseURL = 'http://localhost'
 
 # app.baseURL = ''
 # app.forceGlobalSecureRequests = false
@@ -39,8 +43,8 @@
 
 # database.default.hostname = localhost
 # database.default.database = ci4
-# database.default.username = root
-# database.default.password = root
+# database.default.username = erp-ci
+# database.default.password = 
 # database.default.DBDriver = MySQLi
 # database.default.DBPrefix =
 

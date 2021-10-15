@@ -4,6 +4,7 @@ namespace Config;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
+$API = 'App\Controllers\Api';
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
@@ -16,12 +17,12 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
  * Router Setup
  * --------------------------------------------------------------------
  */
-$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultNamespace('App\Controllers\Web');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
-$routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->set404Override('App\Controllers\Errors');
+$routes->setAutoRoute(false);
 
 /*
  * --------------------------------------------------------------------
@@ -32,6 +33,13 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+
+
+$routes->group('api', ['namespace' => $API], function($routes){
+    $routes->resource('rols');
+    $routes->resource('credentials');
+    $routes->resource('users');
+});
 
 /*
  * --------------------------------------------------------------------
