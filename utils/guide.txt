@@ -1,0 +1,7 @@
+Entidades Principales
+    Roles
+    Credenciales
+    Usuarios
+    Proveedores
+    Entradas
+    Productos
