@@ -9,6 +9,11 @@ class Users extends ResourceController
 {
     protected $modelName = 'App\Models\Users';
 
+    public function __construct()
+    {
+        helper(['rol']);
+    }
+
     /**
      * Return an array of resource objects, themselves in array format
      *
@@ -17,9 +22,8 @@ class Users extends ResourceController
     public function index()
     {
         //
-        if (!$response = $this->model->findAll()) {
+        if (!$response = $this->model->findAll())
             $this->failNotFound();
-        }
         return $this->respond(['data' => $response]);
     }
 
@@ -31,6 +35,11 @@ class Users extends ResourceController
     public function show($id = null)
     {
         //
+        if (!$user = $this->model->getOne($id))
+            return $this->failNotFound('Username does not exist');
+        return $this->respond([
+            'data'  => $user
+        ]);
     }
 
     /**
@@ -81,17 +90,18 @@ class Users extends ResourceController
     public function delete($id = null)
     {
         try {
-            if (!$user = $this->model->find($id)) {
+            if (!$user = $this->model->find($id))
                 return $this->failNotFound();
-            }
+            if (!validate_access(['admin','guest'], $user))
+                return $this->failForbidden();
             $authModel = new Auth();
-            if (!$authModel->delete($user->auth_id)) {
+            if (!$authModel->delete($user->auth_id))
                 return $this->failValidationErrors($authModel->ListErrors());
-            }
-            if(session()->user_id == $id) session()->destroy();
+            if (session()->user_id == $id)
+                session()->destroy();
             $authModel->purgeDeleted();
             return $this->respond(array(
-                'message'    => 'Deleted'
+                'message'    => 'deleted'
             ));
         } catch (\Throwable $th) {
             //throw $th;

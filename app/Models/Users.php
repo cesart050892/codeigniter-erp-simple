@@ -49,4 +49,30 @@ class Users extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    // Functions
+
+    public function getOne($id)
+    {
+        return $this->select('
+            users.id,
+            users.`name`,
+            users.surname,
+            users.photo,
+            users.address,
+            users.phone,
+            users.state,
+            users.last_login,
+            users.auth_id,
+            auth.email,
+            auth.username,
+            auth.token,
+            users.rol_id,
+            rols.rol 
+        ')
+            ->join('rols', 'users.rol_id = rols.id')
+            ->join('auth', 'users.auth_id = auth.id')
+            ->where('users.id', $id)
+            ->first();
+    }
 }
