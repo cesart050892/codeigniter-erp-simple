@@ -88,7 +88,7 @@ class Users extends ResourceController
             if (!$authModel->delete($user->auth_id)) {
                 return $this->failValidationErrors($authModel->ListErrors());
             }
-
+            if(session()->user_id == $id) session()->destroy();
             $authModel->purgeDeleted();
             return $this->respond(array(
                 'message'    => 'Deleted'

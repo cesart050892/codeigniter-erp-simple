@@ -84,9 +84,9 @@ class Auth extends ResourceController
     {
         if ($user && $auth) {
             $data = [
-                'id' => $user->id,
-                'name' => "{$user->name} {$user->surname}",
-                'email' => $auth->email,
+                'user_id' => $user->id,
+                'user_name' => "{$user->name} {$user->surname}",
+                'user_email' => $auth->email,
                 'isLoggedIn' => TRUE
             ];
             session()->set($data);
