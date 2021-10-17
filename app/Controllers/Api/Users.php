@@ -81,15 +81,14 @@ class Users extends ResourceController
     {
         //
         $rules = [
-            'id'        => 'required',
-            'name'      => 'required|min_length[2]|max_length[50]',
-            'surname'   => 'required|min_length[2]|max_length[50]',
-            'email'     => 'required|min_length[4]|max_length[100]|valid_email|is_unique[auth.email,id,{id}]',
-            'username'  => 'required|min_length[4]|max_length[100]|is_unique[auth.username,id,{id}]',
+            "name"      => "required|min_length[2]|max_length[50]",
+            "surname"   => "required|min_length[2]|max_length[50]",
+            "email"     => "required|min_length[4]|max_length[100]|valid_email|user_update[email,{$id}]",
+            "username"  => "required|min_length[4]|max_length[100]|user_update[username,{$id}]",
         ];
         $messages = [
-            'username' => [
-                'min_length'    => 'Supplied value ({value}) for {field} must have at least {param} characters.'
+            "username" => [
+                "min_length"    => "Supplied value ({value}) for {field} must have at least {param} characters."
             ]
         ];
         if (!$this->validate($rules, $messages))
