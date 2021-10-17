@@ -80,6 +80,16 @@ class Users extends ResourceController
     public function update($id = null)
     {
         //
+        $rules = [];
+        $messages = [];
+        if (!$this->validate($rules, $messages))
+            return $this->failValidationErrors($this->validator->listErrors());
+        if (!$user = $this->model->find($id))
+            return $this->failNotFound();
+        $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
+        return $this->respondUpdated([
+            'message'   => 'update'
+        ]);
     }
 
     /**
@@ -89,23 +99,26 @@ class Users extends ResourceController
      */
     public function delete($id = null)
     {
-        try {
-            if (!$user = $this->model->find($id))
-                return $this->failNotFound();
-            if (!validate_access(['admin','guest'], $user))
+        if (!$user = $this->model->find($id))
+            return $this->failNotFound();
+        if (session()->user_id == $id) {
+            $this->actionDelete($user);
+            session()->destroy();
+        } else {
+            if (!validate_access(['admin'], session()->user_id))
                 return $this->failForbidden();
-            $authModel = new Auth();
-            if (!$authModel->delete($user->auth_id))
-                return $this->failValidationErrors($authModel->ListErrors());
-            if (session()->user_id == $id)
-                session()->destroy();
-            $authModel->purgeDeleted();
-            return $this->respond(array(
-                'message'    => 'deleted'
-            ));
-        } catch (\Throwable $th) {
-            //throw $th;
-            return $this->failServerError();
+            $this->actionDelete($user);
         }
+        return $this->respond(array(
+            'message'    => 'deleted'
+        ));
+    }
+
+    protected function actionDelete($user)
+    {
+        $model = new Auth();
+        if (!$model->delete($user->auth_id))
+            return $this->failValidationErrors($model->ListErrors());
+        $model->purgeDeleted();
     }
 }

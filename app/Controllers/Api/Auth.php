@@ -32,21 +32,18 @@ class Auth extends ResourceController
                 'required' => 'All accounts must have {field} provided'
             ]
         ];
-        if (!$this->validate($rules, $messages)) {
+        if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        }
         $userModel  = new UsersModel();
         $userEntity = new UsersEntity();
         $authEntity = new EntitiesAuth();
         $authEntity->fill($this->request->getPost(['username', 'email', 'password']));
-        if (!$this->model->save($authEntity)) {
+        if (!$this->model->save($authEntity))
             return $this->failValidationErrors($this->model->listErrors());
-        }
-        $userEntity->fill($this->request->getPost(['name', 'surname']));
+        $userEntity->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
         $userEntity->fill(['auth_id' => $this->model->insertID()]);
-        if (!$userModel->save($userEntity)) {
+        if (!$userModel->save($userEntity))
             return $this->failValidationErrors($userModel->listErrors());
-        }
         $user = $userModel->find($userModel->insertID());
         return $this->respondCreated([
             'message'   => 'created',
@@ -60,20 +57,17 @@ class Auth extends ResourceController
         $username = $this->request->getPost('username', FILTER_SANITIZE_STRING);
         $password = $this->request->getPost('password', FILTER_SANITIZE_STRING);
         $auth = $this->model->where('username', $username)->first();
-        if (!$auth) {
+        if (!$auth)
             return $this->failNotFound('Username does not exist.');
-        }
-        if (!password_verify($password, $auth->password)) {
+        if (!password_verify($password, $auth->password))
             return $this->failNotFound('Password is incorrect.');
-        }
         $user = $userModel->where('auth_id', $auth->id)->first();
         $data = [
             'name' => "{$user->name} {$user->surname}",
             'email' => $auth->email,
         ];
-        if (!$this->setSession($user, $auth)) {
+        if (!$this->setSession($user, $auth))
             return $this->failServerError();
-        };
         return $this->respond([
             'message'   => 'logged in',
             'data'      => $data
