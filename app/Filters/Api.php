@@ -31,7 +31,8 @@ class Api implements FilterInterface
             $session = session();
             helper(['rol']);
             if (!$session->isLoggedIn)
-                return Services::response()->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED, 'Unauthorized')
+                return Services::response()
+                    ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED, 'Unauthorized')
                     ->setJSON([
                         'status' => ResponseInterface::HTTP_UNAUTHORIZED,
                         'message' => 'You need to sign in or sign up before continuing.',
@@ -39,7 +40,8 @@ class Api implements FilterInterface
                     ]);
             if (is_array($arguments))
                 if (!validate_access($arguments, session()->user_id))
-                    return Services::response()->setStatusCode(ResponseInterface::HTTP_FORBIDDEN, 'Forbidden')
+                    return Services::response()
+                        ->setStatusCode(ResponseInterface::HTTP_FORBIDDEN, 'Forbidden')
                         ->setJSON([
                             'status' => ResponseInterface::HTTP_FORBIDDEN,
                             'message' => 'Forbidden',
@@ -50,7 +52,8 @@ class Api implements FilterInterface
                 'status' => ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Server Error'
             ];
-            return Services::response()->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR, 'A server error')
+            return Services::response()
+                ->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR, 'Server Error')
                 ->setJSON($data);
         }
     }
