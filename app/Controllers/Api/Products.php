@@ -2,13 +2,13 @@
 
 namespace App\Controllers\Api;
 
-use App\Entities\Suppliers as EntitiesSuppliers;
+use App\Entities\Products as EntitiesProducts;
 use CodeIgniter\RESTful\ResourceController;
 
-class Suppliers extends ResourceController
+class Products extends ResourceController
 {
 
-    protected $modelName = 'App\Models\Suppliers';
+    protected $modelName = 'App\Models\Products';
 
     /**
      * Return an array of resource objects, themselves in array format
@@ -58,31 +58,28 @@ class Suppliers extends ResourceController
     public function create()
     {
         $rules = [
-            'name'              => 'min_length[2]|max_length[50]',
-            'contact'          => 'required|min_length[2]|max_length[50]',
-            'email'             => 'required|min_length[4]|max_length[100]|valid_email|is_unique[clients.email]',
+            'description'       => 'min_length[2]|max_length[50]',
+            'price'             => 'required',
+            'supplier'          => 'required',
         ];
         $messages =     [
-            'contact' => [
-                'required' => 'All accounts must have {field} provided',
-                'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
-            ],
-            'email' => [
-                'required' => 'All accounts must have {field} provided',
-                'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
+            'description' => [
+                'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.',
+                'max_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
             ]
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        $supplier = new EntitiesSuppliers();
-        $supplier->fill($this->request->getPost(['name', 'email', 'contact'], FILTER_SANITIZE_STRING));
-        $supplier->user_id = session()->user_id;
-        if (!$this->model->save($supplier))
+        $product = new EntitiesProducts();
+        $product->fill($this->request->getPost(['description', 'price'], FILTER_SANITIZE_STRING));
+        $product->supplier_id = $this->request->getPost('supplier');
+        $product->user_id = session()->user_id;
+        if (!$this->model->save($product))
             return $this->failValidationErrors($this->model->listErrors());
-        $supplier = $this->model->find($this->model->insertID());
+        $product = $this->model->find($this->model->insertID());
         return $this->respondCreated([
             'message'   => 'created',
-            'data'      => $supplier
+            'data'      => $product
         ]);
     }
 
@@ -105,30 +102,27 @@ class Suppliers extends ResourceController
     {
         //
         $rules = [
-            "name"              => "min_length[2]|max_length[50]",
-            "contact"          => "required|min_length[2]|max_length[50]",
-            "email"             => "required|min_length[4]|max_length[100]|valid_email|is_unique[clients.email,id,{$id}]",
+            'description'       => 'min_length[2]|max_length[50]',
+            'price'             => 'required',
+            'supplier'          => 'required',
         ];
         $messages =     [
-            "contact" => [
-                "required" => "All accounts must have {field} provided",
-                "min_length" => "Supplied value ({value}) for {field} must have at least {param} characters."
-            ],
-            "email" => [
-                "required" => "All accounts must have {field} provided",
-                "min_length" => "Supplied value ({value}) for {field} must have at least {param} characters."
+            'description' => [
+                'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.',
+                'max_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
             ]
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        $supplier = $this->model->find($id);
-        $supplier->fill($this->request->getPost(['name', 'email', 'contact'], FILTER_SANITIZE_STRING));
-        $supplier->user_id = session()->user_id;
-        if (!$this->model->save($supplier))
+        $product = $this->model->find($id);
+        $product->fill($this->request->getPost(['description', 'price'], FILTER_SANITIZE_STRING));
+        $product->supplier_id = $this->request->getPost('supplier');
+        $product->user_id = session()->user_id;
+        if (!$this->model->save($product))
             return $this->failValidationErrors($this->model->listErrors());
         return $this->respondUpdated([
             'message'   => 'updated',
-            'data'      => $supplier
+            'data'      => $product
         ]);
     }
 

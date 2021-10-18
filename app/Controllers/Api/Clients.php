@@ -126,8 +126,8 @@ class Clients extends ResourceController
         $client->user_id = session()->user_id;
         if (!$this->model->save($client))
             return $this->failValidationErrors($this->model->listErrors());
-        return $this->respondCreated([
-            'message'   => 'created',
+        return $this->respondUpdated([
+            'message'   => 'updated',
             'data'      => $client
         ]);
     }
