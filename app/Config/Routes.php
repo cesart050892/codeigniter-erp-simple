@@ -47,6 +47,7 @@ $routes->group('api', ['namespace' => $API, []], function ($routes) {
     $routes->resource('clients', ['filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('suppliers', ['filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('products', ['filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('purchases', ['filter' => 'api:admin,guest', 'websafe' => 1]);
 });
 
 /*
