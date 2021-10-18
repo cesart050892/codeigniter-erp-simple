@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Purchases as ModelPurchase;
+use App\Entities\Purchases as EntityPurchase;
 use CodeIgniter\Model;
 
 class Products extends Model
@@ -41,11 +43,27 @@ class Products extends Model
     // Callbacks
     protected $allowCallbacks       = true;
     protected $beforeInsert         = [];
-    protected $afterInsert          = [];
+    protected $afterInsert          = ['addPurchases'];
     protected $beforeUpdate         = [];
     protected $afterUpdate          = [];
     protected $beforeFind           = [];
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    // Functions
+
+    public function addPurchases(array $data)
+    {
+        $modelPurchase = new ModelPurchase();
+        $entityPurchase = new EntityPurchase();
+        $entityPurchase->fill([
+            'product_id'    => $data['id'],
+            'price'         => $data['data']['price'],
+            'quantity'      => $data['data']['stock'],
+            'user_id'         => $data['data']['user_id'],
+        ]);
+        if ($modelPurchase->save($entityPurchase))
+            return $data;
+    }
 }

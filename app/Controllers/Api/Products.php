@@ -73,6 +73,12 @@ class Products extends ResourceController
         $product = new EntitiesProducts();
         $product->fill($this->request->getPost(['description', 'price'], FILTER_SANITIZE_STRING));
         $product->supplier_id = $this->request->getPost('supplier');
+        if ($data = $this->request->getPost('stock')) {
+            $product->stock = $data;
+            unset($data);
+        }else{
+            $product->stock = 1;
+        }
         $product->user_id = session()->user_id;
         if (!$this->model->save($product))
             return $this->failValidationErrors($this->model->listErrors());

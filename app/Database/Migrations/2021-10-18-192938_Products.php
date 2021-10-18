@@ -30,6 +30,7 @@ class Products extends Migration
                 'type'          => 'INT',
                 'constraint'    => '10',
                 'null'          => true,
+                'default'        => '1'
             ],
             'photo'    => [
                 'type'          => 'TEXT',
