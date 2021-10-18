@@ -23,7 +23,7 @@ class Users extends ResourceController
     {
         //
         if (!$response = $this->model->findAll())
-            $this->failNotFound();
+            return $this->failNotFound();
         return $this->respond(['data' => $response]);
     }
 
