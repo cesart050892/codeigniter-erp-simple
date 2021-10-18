@@ -24,28 +24,36 @@ class Api implements FilterInterface
      *
      * @return mixed
      */
-	public function before(RequestInterface $request, $arguments = null)
-	{
-		//
-		try {
-			$session = session();
-			if (!$session->isLoggedIn) {
-				return Services::response()->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED, 'Not access')
-					->setJSON([
-						'status' => ResponseInterface::HTTP_UNAUTHORIZED,
-						'message' => 'You need to sign in or sign up before continuing.',
-						'data' => null
-					]);
-			}
-		} catch (\Exception $e) {
-			$data = [
-				'status' => ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
-				'message' => 'Server Error'
-			];
-			return Services::response()->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR, 'A server error')
-				->setJSON($data);
-		}
-	}
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        //
+        try {
+            $session = session();
+            helper(['rol']);
+            if (!$session->isLoggedIn)
+                return Services::response()->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED, 'Unauthorized')
+                    ->setJSON([
+                        'status' => ResponseInterface::HTTP_UNAUTHORIZED,
+                        'message' => 'You need to sign in or sign up before continuing.',
+                        'data' => null
+                    ]);
+            if (is_array($arguments))
+                if (!validate_access($arguments, session()->user_id))
+                    return Services::response()->setStatusCode(ResponseInterface::HTTP_FORBIDDEN, 'Forbidden')
+                        ->setJSON([
+                            'status' => ResponseInterface::HTTP_FORBIDDEN,
+                            'message' => 'Forbidden',
+                            'data' => null
+                        ]);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Server Error'
+            ];
+            return Services::response()->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR, 'A server error')
+                ->setJSON($data);
+        }
+    }
 
     /**
      * Allows After filters to inspect and modify the response

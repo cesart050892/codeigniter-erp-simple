@@ -43,6 +43,21 @@ class Users extends ResourceController
     }
 
     /**
+     * Return the properties of a resource object
+     *
+     * @return mixed
+     */
+    public function profile()
+    {
+        //
+        if (!$user = $this->model->getOne(session()->user_id))
+            return $this->failNotFound('Username does not exist');
+        return $this->respond([
+            'data'  => $user
+        ]);
+    }
+
+    /**
      * Return a new resource object, with default properties
      *
      * @return mixed

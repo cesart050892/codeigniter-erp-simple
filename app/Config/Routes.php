@@ -41,8 +41,9 @@ $routes->group('api', ['namespace' => $API, []], function ($routes) {
         $routes->post('login', 'Auth::login');
         $routes->get('logout','Auth::logout', ['filter' => 'api']);
     });
-    $routes->resource('rols', ['filter' => 'api','websafe' => 1]);
-    $routes->resource('users', ['filter' => 'api','websafe' => 1]);
+    $routes->get('profile', 'Users::profile');
+    $routes->resource('rols', ['filter' => 'api:admin','websafe' => 1]);
+    $routes->resource('users', ['filter' => 'api:admin','websafe' => 1]);
 });
 
 /*
