@@ -13,11 +13,12 @@ class Custom
     {
         $this->model = new Users();
     }
-    public function user_update(string $str, string $field, array $data): bool
+    public function to_update(string $str, string $field, array $data): bool
     {
         [$field, $ignoreValue] = array_pad(explode(',', $field), 2, null);
 
-        $user = $this->model->find($ignoreValue);
+        if (!$user = $this->model->find($ignoreValue))
+            return false;
         $ignoreValue = $user->auth_id;
         $ignoreField = 'id';
 

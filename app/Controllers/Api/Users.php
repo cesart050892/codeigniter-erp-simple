@@ -79,36 +79,33 @@ class Users extends ResourceController
      */
     public function update($id = null)
     {
+        if (!$user = $this->model->find($id))
+            return $this->failNotFound('User does not exist!');
         //
         $rules = [
             "name"      => "required|min_length[2]|max_length[50]",
             "surname"   => "required|min_length[2]|max_length[50]",
-            "email"     => "required|min_length[4]|max_length[100]|valid_email|user_update[email,{$id}]",
-            "username"  => "required|min_length[4]|max_length[100]|user_update[username,{$id}]",
+            "email"     => "required|min_length[4]|max_length[100]|valid_email|to_update[email,{$id}]",
+            "username"  => "required|min_length[4]|max_length[100]|to_update[username,{$id}]",
         ];
         $messages = [
             "username" => [
-                "min_length"    => "Supplied value ({value}) for {field} must have at least {param} characters."
+                "min_length"    => "Supplied value ({value}) for {field} must have at least {param} characters.",
+                // "to_update"     => "Jodido"
             ]
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        if (!$user = $this->model->find($id))
-            return $this->failNotFound();
         $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
         $authModel = new Auth();
         $auth = $authModel->find($user->auth_id);
         $auth->fill($this->request->getPost(['email', 'username'], FILTER_SANITIZE_STRING));
-        if ($auth->hasChanged()) {
-            if (!$authModel->save($auth)) {
+        if ($auth->hasChanged())
+            if (!$authModel->save($auth))
                 return $this->failValidationErrors($authModel->errors());
-            }
-        }
-        if ($user->hasChanged()) {
-            if (!$this->model->save($user)) {
+        if ($user->hasChanged())
+            if (!$this->model->save($user))
                 return $this->failValidationErrors($this->model->errors());
-            }
-        }
         return $this->respondUpdated([
             'message'   => 'update'
         ]);
