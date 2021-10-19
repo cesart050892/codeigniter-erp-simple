@@ -92,7 +92,7 @@ class Products extends ResourceController
         if (!$this->model->save($product))
             return $this->failValidationErrors($this->model->listErrors());
         $product = $this->model->find($this->model->insertID());
-        if ($this->addPurchases($product))
+        if (!$this->addPurchases($product))
             return $this->failValidationErrors($this->modelPurchase->listErrors());
         return $this->respondCreated([
             'message'   => 'created',
@@ -170,9 +170,9 @@ class Products extends ResourceController
             'quantity'      => $entity->stock,
             'user_id'         => $entity->user_id,
         ]);
-        if ($this->modelPurchase->save($entityPurchase))
-            return true;
-        return false;
+        if (!$this->modelPurchase->save($entityPurchase))
+            return false;
+        return true;
     }
 
     public function updatePrice($id = null)
