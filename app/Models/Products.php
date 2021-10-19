@@ -43,27 +43,11 @@ class Products extends Model
     // Callbacks
     protected $allowCallbacks       = true;
     protected $beforeInsert         = [];
-    protected $afterInsert          = ['addPurchases'];
+    protected $afterInsert          = [];
     protected $beforeUpdate         = [];
     protected $afterUpdate          = [];
     protected $beforeFind           = [];
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
-
-    // Functions
-
-    public function addPurchases(array $data)
-    {
-        $modelPurchase = new ModelPurchase();
-        $entityPurchase = new EntityPurchase();
-        $entityPurchase->fill([
-            'product_id'    => $data['id'],
-            'price'         => $data['data']['price'],
-            'quantity'      => $data['data']['stock'],
-            'user_id'         => $data['data']['user_id'],
-        ]);
-        if ($modelPurchase->save($entityPurchase))
-            return $data;
-    }
 }

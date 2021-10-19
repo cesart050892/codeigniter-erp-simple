@@ -35,7 +35,8 @@ $routes->setAutoRoute(false);
 $routes->get('/', 'Home::index');
 
 
-$routes->group('api', ['namespace' => $API, []], function ($routes) {
+$routes->group('api', ['namespace' => $API], function ($routes) {
+    $routes->post('purchases/add/(:num)', 'Products::updatePrice/$1', ['filter' => 'api']);
     $routes->group('auth', function ($routes) {
         $routes->post('signup', 'Auth::store');
         $routes->post('login', 'Auth::login');

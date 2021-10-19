@@ -3,12 +3,21 @@
 namespace App\Controllers\Api;
 
 use App\Entities\Products as EntitiesProducts;
+use App\Entities\Purchases as EntitiesPurchases;
+use App\Models\Purchases as ModelPurchases;
 use CodeIgniter\RESTful\ResourceController;
 
 class Products extends ResourceController
 {
 
     protected $modelName = 'App\Models\Products';
+    protected $modelPurchase;
+
+    public function __construct()
+    {
+        $this->modelPurchase = new ModelPurchases();
+    }
+
 
     /**
      * Return an array of resource objects, themselves in array format
@@ -76,13 +85,15 @@ class Products extends ResourceController
         if ($data = $this->request->getPost('stock')) {
             $product->stock = $data;
             unset($data);
-        }else{
+        } else {
             $product->stock = 1;
         }
         $product->user_id = session()->user_id;
         if (!$this->model->save($product))
             return $this->failValidationErrors($this->model->listErrors());
         $product = $this->model->find($this->model->insertID());
+        if ($this->addPurchases($product))
+            return $this->failValidationErrors($this->modelPurchase->listErrors());
         return $this->respondCreated([
             'message'   => 'created',
             'data'      => $product
@@ -148,5 +159,55 @@ class Products extends ResourceController
         return $this->respond(array(
             'message'    => 'deleted'
         ));
+    }
+
+    protected function addPurchases(EntitiesProducts $entity)
+    {
+        $entityPurchase = new EntitiesPurchases();
+        $entityPurchase->fill([
+            'product_id'    => $entity->id,
+            'price'         => $entity->price,
+            'quantity'      => $entity->stock,
+            'user_id'         => $entity->user_id,
+        ]);
+        if ($this->modelPurchase->save($entityPurchase))
+            return true;
+        return false;
+    }
+
+    public function updatePrice($id = null)
+    {
+        //
+        $rules = [
+            'quantity'       => 'required',
+            'price'             => 'required',
+        ];
+        if (!$this->validate($rules))
+            return $this->failValidationErrors($this->validator->listErrors());
+
+        $data = $this->request->getPost(['quantity', 'price']);
+        $data += [
+            'user_id'       => session()->user_id,
+            'product_id'    => $id
+        ];
+
+        $purchase = new EntitiesPurchases();
+        $purchase->fill($data);
+
+        $model = new ModelPurchases();
+        if (!$model->save($purchase))
+            return $this->failValidationErrors($model->listErrors());
+        
+        $product = $this->model->find($id);
+        $newTotal = ($product->price *  $product->stock) + ($data['quantity'] * $data['price']);
+        $product->stock = $product->stock + $data['quantity'];
+        $product->price = $newTotal / $product->stock;
+
+        if (!$this->model->save($product))
+            return $this->failValidationErrors($this->model->listErrors());
+        return $this->respondUpdated([
+            'message'   => 'updated',
+            'data'      => $product
+        ]);
     }
 }
