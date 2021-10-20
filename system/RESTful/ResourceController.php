@@ -12,6 +12,7 @@
 namespace CodeIgniter\RESTful;
 
 use CodeIgniter\API\ResponseTrait;
+use App\Libraries\Economics;
 
 /**
  * An extendable controller to provide a RESTful API for a resource.
@@ -19,6 +20,7 @@ use CodeIgniter\API\ResponseTrait;
 class ResourceController extends BaseResource
 {
     use ResponseTrait;
+    use Economics;
 
     /**
      * Return an array of resource objects, themselves in array format

@@ -4,7 +4,6 @@ namespace Config;
 
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
-$API = 'App\Controllers\Api';
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
@@ -35,20 +34,23 @@ $routes->setAutoRoute(false);
 $routes->get('/', 'Home::index');
 
 
-$routes->group('api', ['namespace' => $API], function ($routes) {
-    $routes->post('purchases/add/(:num)', 'Products::updatePrice/$1', ['filter' => 'api']);
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+
     $routes->group('auth', function ($routes) {
         $routes->post('signup', 'Auth::store');
         $routes->post('login', 'Auth::login');
         $routes->get('logout', 'Auth::logout', ['filter' => 'api']);
     });
+
     $routes->get('profile', 'Users::profile', ['filter' => 'api']);
-    $routes->resource('rols', ['filter' => 'api:admin', 'websafe' => 1]);
-    $routes->resource('users', ['filter' => 'api:admin', 'websafe' => 1]);
-    $routes->resource('clients', ['filter' => 'api:admin,guest', 'websafe' => 1]);
-    $routes->resource('suppliers', ['filter' => 'api:admin,guest', 'websafe' => 1]);
-    $routes->resource('products', ['filter' => 'api:admin,guest', 'websafe' => 1]);
-    $routes->resource('purchases', ['filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->post('purchases/add/(:num)', 'Products::updatePrice/$1', ['filter' => 'api', 'namespace' => 'App\Controllers\Api']);
+    $routes->resource('rols',       ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('users',      ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('clients',    ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('suppliers',  ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('products',   ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('purchases',  ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('temp',       ['controller' => 'Tempdetailsinvoice', 'filter' => 'api:admin,guest', 'websafe' => 1]);
 });
 
 /*

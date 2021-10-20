@@ -3,5 +3,5 @@ Entidades Principales
     Credenciales
     Usuarios
     Proveedores
-    Entradas
     Productos
+    Entradas
