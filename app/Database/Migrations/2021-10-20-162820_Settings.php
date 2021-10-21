@@ -25,7 +25,7 @@ class Settings extends Migration
             'value'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '200',
-                'null'          => false,
+                'null'          => true,
             ],
         ]);
         $this->forge->addKey('id', true);

@@ -9,6 +9,7 @@ class Init extends Seeder
 	public function run()
 	{
 		//
+		$this->call('App\Database\Seeds\Data\Settings');
 		$this->call('App\Database\Seeds\Data\Permissions');
 		$this->call('App\Database\Seeds\Data\Sections');
 		$this->call('App\Database\Seeds\Data\Rols');

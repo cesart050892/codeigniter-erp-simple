@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
 
@@ -17,6 +17,14 @@ class Settings extends ResourceController
     public function index()
     {
         //
+        $data = [];
+        $result = $this->model->findAll();
+        foreach ($result as $key => $value) {
+            $data += [$value->option => $value->value];
+        }
+        return $this->respond([
+            'data'  => $data
+        ]);
     }
 
     /**
@@ -77,5 +85,22 @@ class Settings extends ResourceController
     public function delete($id = null)
     {
         //
+    }
+
+    /**
+     * Find a resource object from the model by key
+     *
+     * @return mixed
+     */
+    public function option($option = null)
+    {
+        //
+        if (!$result = $this->model->where('option', $option)->first())
+            return $this->failNotFound('This options not found!');
+        return $this->respond([
+            'data'  => [
+                $result->option => $result->value
+            ]
+        ]);
     }
 }
