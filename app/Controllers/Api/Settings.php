@@ -95,7 +95,7 @@ class Settings extends ResourceController
     public function option($option = null)
     {
         //
-        if (!$result = $this->model->where('option', $option)->first())
+        if (!$result = $this->model->option($option))
             return $this->failNotFound('This options not found!');
         return $this->respond([
             'data'  => [

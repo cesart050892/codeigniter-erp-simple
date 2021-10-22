@@ -46,11 +46,19 @@ class Settings extends Seeder
             ],
 			[
                 'option'	=> 'iva',
-                'value'		=> '15%'
+                'value'		=> '0.15'
             ],
 			[
                 'option'	=> 'currency',
                 'value'		=> 'C$'
+            ],
+            [
+                'option'	=> 'factor_overpicing',
+                'value'		=> '1.5'
+            ],
+            [
+                'option'	=> 'porcent_overpricing',
+                'value'		=> '0.3333'
             ],
         ];
 

@@ -42,4 +42,11 @@ class Settings extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    // Functions
+
+    public function option($option)
+    {
+        return $this->where('option', $option)->first();
+    }
 }
