@@ -16,5 +16,8 @@ class Init extends Seeder
 		$this->call('App\Database\Seeds\Data\PivotRolsSectionsPermissions');
 		$this->call('App\Database\Seeds\Data\Auth');
 		$this->call('App\Database\Seeds\Data\Users');
+		$this->call('App\Database\Seeds\Data\Clients');
+		$this->call('App\Database\Seeds\Data\Suppliers');
+		$this->call('App\Database\Seeds\Data\Products');
 	}
 }
