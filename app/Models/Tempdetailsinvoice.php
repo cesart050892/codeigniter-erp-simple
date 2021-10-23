@@ -44,4 +44,24 @@ class Tempdetailsinvoice extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    // Functions
+
+    public function generate($token)
+    {
+        return $this->select('
+            temp_details_invoice.token,
+            products.description,
+            temp_details_invoice.price,
+            temp_details_invoice.quantity,
+            users.`name`,
+            users.surname,
+            rols.rol 
+        ')
+        ->join('products','temp_details_invoice.product_id = products.id')
+        ->join('users','products.user_id = users.id')
+        ->join('rols','users.rol_id = rols.id')
+        ->where('token',$token)
+        ->findAll();
+    }
 }
