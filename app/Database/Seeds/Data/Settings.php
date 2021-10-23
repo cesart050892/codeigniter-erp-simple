@@ -20,6 +20,14 @@ class Settings extends Seeder
                 'option'	=> 'name',
                 'value'		=> 'ERP SIMPLE'
             ],
+            [
+                'option'	=> 'ticket_slogan',
+                'value'		=> 'Gracias por su compra!'
+            ],
+            [
+                'option'	=> 'address',
+                'value'		=> 'CC Zumen. Managua, Nicaragua'
+            ],
 			[
                 'option'	=> 'phone-office',
                 'value'		=> null
