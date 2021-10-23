@@ -58,10 +58,16 @@ class Tempdetailsinvoice extends Model
             users.surname,
             rols.rol 
         ')
-        ->join('products','temp_details_invoice.product_id = products.id')
-        ->join('users','products.user_id = users.id')
-        ->join('rols','users.rol_id = rols.id')
-        ->where('token',$token)
-        ->findAll();
+            ->join('products', 'temp_details_invoice.product_id = products.id')
+            ->join('users', 'products.user_id = users.id')
+            ->join('rols', 'users.rol_id = rols.id')
+            ->where('token', $token)
+            ->findAll();
+    }
+
+    public function option($option)
+    {
+        return $this->where('option', $option)->first();
+        
     }
 }

@@ -65,7 +65,7 @@ class Tempdetailsinvoice extends ResourceController
             return $this->failValidationErrors("No stock, only {$product->stock}");
         $temp->fill(['quantity' => $quantity]);
         $factor = $mSetting->option('factor_overpicing');
-        $temp->price = $product->price * $factor;
+        $temp->price = $product->price * $factor->value;
         $temp->price = $this->roundup($temp->price, 1);
         $temp->product_id = $product->id;
         if ($data = $this->request->getPost('token')) {
@@ -123,5 +123,72 @@ class Tempdetailsinvoice extends ResourceController
     public function delete($id = null)
     {
         //
+    }
+
+
+    function generate()
+    {
+        //$datosVenta = $this->ventas->where('id', $id_venta)->first();
+        //$detalle_venta = $this->detalle_venta->select('*')->where('id_venta', $id_venta)->findAll();
+        //$nombreTienda = $this->configuracion->select('valor')->where('nombre', 'tienda_nombre')->get()->getRow()->valor;
+        //$direccionTienda = $this->configuracion->select('valor')->where('nombre', 'tienda_direccion')->get()->getRow()->valor;
+        //$leyendaTicket = $this->configuracion->select('valor')->where('nombre', 'ticket_leyenda')->get()->getRow()->valor;
+        $token = $this->request->getGet('token');
+        $data = $this->model->generate($token);
+        if (empty($data))
+            return $this->failValidationErrors('Token does not exist!');
+        $pdf = new \FPDF('P', 'mm', array(80, 200));
+        $pdf->AddPage();
+        $pdf->SetMargins(5, 5, 5);
+        $pdf->SetTitle("Venta");
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(60, 5, 'Implement - ERP Simple', 0, 1, 'C');
+
+        $pdf->Image(base_url('assets/img/logo.jpeg'), 5, 10, 10, 10, 'JPEG');
+
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(60, 5, 'Managua, Nicaragua', 0, 1, 'C');
+
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(60, 5, date('D, d M Y H:i:s'), 0, 1, 'C');
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 9);
+        $pdf->Cell(15, 5, utf8_decode('# REF:'), 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(30, 5, $data[0]->token, 0, 1, 'C');
+
+        $pdf->Ln();
+
+        $pdf->SetFont('Arial', 'B', 7);
+
+        $pdf->Cell(7, 5, 'CANT.', 0, 0, 'L');
+        $pdf->Cell(5);
+        $pdf->Cell(25, 5, 'NOMBRE', 0, 0, 'L');
+        $pdf->Cell(15, 5, 'PRECIO', 0, 0, 'L');
+        $pdf->Cell(15, 5, 'TOTAL', 0, 1, 'L');
+
+        $pdf->SetFont('Arial', '', 7);
+
+        $contador = 1;
+
+        foreach ($data as $row) {
+            $pdf->Cell(7, 5, $row->quantity, 0, 0, 'L');
+            $pdf->Cell(5);
+            $pdf->Cell(25, 5, $row->description, 0, 0, 'L');
+            $pdf->Cell(15, 5, $row->price, 0, 0, 'L');
+            $importe = number_format($row->price * $row->quantity, 2, '.', ',');
+            $pdf->Cell(15, 5, 'C$' . $importe, 0, 1, 'R');
+            $contador++;
+        }
+
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->Cell(70, 5, 'TOTAL: C$ ' . number_format(9999, 2, '.', ','), 0, 1, 'R');
+
+        $pdf->Ln();
+        $pdf->MultiCell(70, 5, 'Gracias por su compra!', 0, 'C', 0);
+
+        $this->response->setHeader('Content-Type', 'application/pdf');
+        $pdf->Output("ticket.pdf", "I");
     }
 }
