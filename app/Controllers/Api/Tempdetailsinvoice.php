@@ -7,6 +7,9 @@ use App\Models\Products;
 use App\Models\Settings;
 use App\Models\Users;
 use CodeIgniter\RESTful\ResourceController;
+use Dompdf\Dompdf;
+
+require_once APPPATH . 'ThirdParty' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'autoload.inc.php';
 
 class Tempdetailsinvoice extends ResourceController
 {
@@ -144,6 +147,32 @@ class Tempdetailsinvoice extends ResourceController
         }
         if (empty($data))
             return $this->failValidationErrors('Token does not exist!');
+        //$this->fnfpdf($data, $setting);
+        $this->fnDom('inv_1', $data, $setting);
+    }
+
+    private function fnDom($html, $data, $setting)
+    {
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        
+        $data = [
+            'data'      => $data,
+            'setting'   => $setting,
+            'anulada'   => '<img class="anulada" src="assets/img/docs/anulado.png" alt="Anulada">'
+        ];
+        $dompdf->loadHtml(view('templates/invoices/' . $html, $data));
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('letter', 'portrait');
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $this->response->setHeader('Content-Type', 'application/pdf');
+        $dompdf->stream('factura_#pdf', array('Attachment' => 0));
+    }
+
+    private function fnfpdf($data, $setting)
+    {
         $pdf = new \FPDF('P', 'mm', array(80, 200));
         $pdf->AddPage();
         $pdf->SetMargins(5, 5, 5);
@@ -160,7 +189,7 @@ class Tempdetailsinvoice extends ResourceController
         $pdf->Cell(60, 5, date('D, d M Y H:i:s'), 0, 1, 'C');
         $user = new Users();
         $user = $user->find(session()->user_id);
-        $pdf->Cell(60, 5, "Vendedor: {$user->name} {$user->surname}" , 0, 1, 'C');
+        $pdf->Cell(60, 5, "Vendedor: {$user->name} {$user->surname}", 0, 1, 'C');
         $pdf->Ln();
         $pdf->SetFont('Arial', 'B', 9);
         $pdf->Cell(15, 5, utf8_decode('# REF:'), 0, 0, 'L');
