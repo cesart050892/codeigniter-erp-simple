@@ -4,7 +4,7 @@ namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
 
-class PivotRolsSectionsPermissions extends ResourceController
+class PivotRols extends ResourceController
 {
     /**
      * Return an array of resource objects, themselves in array format

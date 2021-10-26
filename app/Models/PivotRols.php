@@ -4,14 +4,14 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PivotRolsSectionsPermissions extends Model
+class PivotRols extends Model
 {
     protected $DBGroup              = 'default';
     protected $table                = 'pivot_rols_sections_permissions';
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\PivotRolsSectionsPermissions::class;
+    protected $returnType           = \App\Entities\PivotRols::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
     protected $allowedFields        = ['rol_id', 'section_id', 'permission_id'];

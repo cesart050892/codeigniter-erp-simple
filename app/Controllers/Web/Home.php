@@ -4,14 +4,14 @@ namespace App\Controllers\Web;
 
 use App\Controllers\BaseController;
 use App\Models\Settings;
-use App\Models\Tempdetailsinvoice;
+use App\Models\TempSales;
 
 class Home extends BaseController
 {
     public function index()
     {
         //
-        $model = new Tempdetailsinvoice();
+        $model = new TempSales();
         $data = $model->generate('616fb07c27f82');
         $settings = new Settings();
         $setting = [];

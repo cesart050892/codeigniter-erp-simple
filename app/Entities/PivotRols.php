@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use CodeIgniter\Entity\Entity;
 
-class PivotRolsSectionsPermissions extends Entity
+class PivotRols extends Entity
 {
     protected $datamap = [];
     protected $dates   = [

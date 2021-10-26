@@ -2,17 +2,18 @@
 
 namespace App\Controllers\Api;
 
-use App\Entities\Tempdetailsinvoice as EntitiesTempdetailsinvoice;
+use App\Entities\TempSales as Entity;
 use App\Models\Products;
 use App\Models\Settings;
 use App\Models\Users;
 use CodeIgniter\RESTful\ResourceController;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use FPDF;
 
 require_once APPPATH . 'ThirdParty' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'autoload.inc.php';
 
-class TempDetailsInvoice extends ResourceController
+class TempSales extends ResourceController
 {
 
     protected $modelName = 'App\Models\TempSales';
@@ -62,7 +63,7 @@ class TempDetailsInvoice extends ResourceController
         if (!$this->validate($rules))
             return $this->failValidationErrors($this->validator->listErrors());
         $model = new Products();
-        $temp = new EntitiesTempdetailsinvoice();
+        $temp = new Entity();
         $mSetting = new Settings();
         $product = $model->find($this->request->getPost('product'));
         $quantity = $this->request->getPost('quantity', FILTER_SANITIZE_STRING);
@@ -176,7 +177,7 @@ class TempDetailsInvoice extends ResourceController
 
     private function fnfpdf($data, $setting)
     {
-        $pdf = new \FPDF('P', 'mm', array(80, 200));
+        $pdf = new FPDF('P', 'mm', array(80, 200));
         $pdf->AddPage();
         $pdf->SetMargins(5, 5, 5);
         $pdf->SetTitle("Venta");

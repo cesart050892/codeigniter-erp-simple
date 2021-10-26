@@ -9,7 +9,7 @@ class PivotRolsSectionsPermissions extends Seeder
     public function run()
     {
         //
-        $model = model('App\Models\PivotRolsSectionsPermissions', false);
+        $model = model('App\Models\PivotRols', false);
 
         $data = [
             [
@@ -20,7 +20,7 @@ class PivotRolsSectionsPermissions extends Seeder
         ];
 
         foreach ($data as $result) {
-            $entity = new \App\Entities\PivotRolsSectionsPermissions($result);
+            $entity = new \App\Entities\PivotRols($result);
             $model->insert($entity);
         }
     }
