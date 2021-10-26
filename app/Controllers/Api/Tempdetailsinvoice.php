@@ -12,7 +12,7 @@ use Dompdf\Options;
 
 require_once APPPATH . 'ThirdParty' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'autoload.inc.php';
 
-class Tempdetailsinvoice extends ResourceController
+class TempDetailsInvoice extends ResourceController
 {
 
     protected $modelName = 'App\Models\Tempdetailsinvoice';

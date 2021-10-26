@@ -22,8 +22,8 @@ class Home extends BaseController
         $data = [
             'data'      => $data,
             'setting'   => $setting,
-            'anulada'   => '<img class="anulada" src="assets/img/docs/anulado.png" alt="Anulada">'
+            'anulada'   => true
         ];
-        echo view('templates/invoices/inv_1',$data);
+        echo view('templates/invoices/temp_invoice_001',$data);
     }
 }
