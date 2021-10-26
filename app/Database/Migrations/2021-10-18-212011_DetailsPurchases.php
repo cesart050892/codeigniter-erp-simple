@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TempPurchase extends Migration
+class DetailsPurchases extends Migration
 {
-    protected $name = 'temp_purchase';
+    protected $name = 'details_purchases';
 
     public function up()
     {
@@ -16,11 +16,6 @@ class TempPurchase extends Migration
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
-            ],
-            'code'    => [
-                'type'          => 'VARCHAR',
-                'constraint'    => '50',
-                'null'          => false,
             ],
             'details'    => [
                 'type'          => 'VARCHAR',
@@ -35,11 +30,6 @@ class TempPurchase extends Migration
             'quantity'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
-                'null'          => true,
-            ],
-            'subtotal'    => [
-                'type'          => 'DOUBLE',
-                'constraint'    => '10,2',
                 'null'          => true,
             ],
             'purchase_id'    => [
