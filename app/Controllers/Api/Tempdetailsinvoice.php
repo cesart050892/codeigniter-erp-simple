@@ -8,6 +8,7 @@ use App\Models\Settings;
 use App\Models\Users;
 use CodeIgniter\RESTful\ResourceController;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 require_once APPPATH . 'ThirdParty' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY_SEPARATOR . 'autoload.inc.php';
 
@@ -148,18 +149,20 @@ class Tempdetailsinvoice extends ResourceController
         if (empty($data))
             return $this->failValidationErrors('Token does not exist!');
         //$this->fnfpdf($data, $setting);
-        $this->fnDom('inv_1', $data, $setting);
+        $this->fnDom('temp_invoice_001', $data, $setting);
     }
 
     private function fnDom($html, $data, $setting)
     {
         // instantiate and use the dompdf class
-        $dompdf = new Dompdf();
-        
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+
         $data = [
             'data'      => $data,
             'setting'   => $setting,
-            'anulada'   => '<img class="anulada" src="assets/img/docs/anulado.png" alt="Anulada">'
+            'anulada'   => true
         ];
         $dompdf->loadHtml(view('templates/invoices/' . $html, $data));
         // (Optional) Setup the paper size and orientation
