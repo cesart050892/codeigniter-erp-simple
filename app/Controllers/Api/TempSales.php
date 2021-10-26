@@ -15,7 +15,7 @@ require_once APPPATH . 'ThirdParty' . DIRECTORY_SEPARATOR . 'dompdf' . DIRECTORY
 class TempDetailsInvoice extends ResourceController
 {
 
-    protected $modelName = 'App\Models\Tempdetailsinvoice';
+    protected $modelName = 'App\Models\TempSales';
 
     /**
      * Return an array of resource objects, themselves in array format
