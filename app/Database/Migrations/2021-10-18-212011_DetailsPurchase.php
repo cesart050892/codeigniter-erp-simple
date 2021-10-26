@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Purchases extends Migration
+class DetailsPurchase extends Migration
 {
-    protected $name = 'purchases';
+    protected $name = 'details_purchase';
 
     public function up()
     {
@@ -17,7 +17,12 @@ class Purchases extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'price'    => [
+            'details'    => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '50',
+                'null'          => false,
+            ],
+            'cost'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
@@ -27,12 +32,7 @@ class Purchases extends Migration
                 'constraint'    => '10',
                 'null'          => true,
             ],
-            'state'    => [
-                'type'          => 'TINYINT',
-                'constraint'    => '2',
-                'default'        => '1'
-            ],
-            'user_id'    => [
+            'purchase_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
@@ -47,8 +47,8 @@ class Purchases extends Migration
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('purchase_id', 'purchases', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

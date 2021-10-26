@@ -17,9 +17,18 @@ class Products extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'code'    => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '75',
+            ],
             'description'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '75',
+            ],
+            'cost'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
             ],
             'price'    => [
                 'type'          => 'DOUBLE',
@@ -27,6 +36,18 @@ class Products extends Migration
                 'null'          => true,
             ],
             'stock'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
+                'null'          => true,
+                'default'        => '0'
+            ],
+            'non_inventoriable'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
+                'null'          => true,
+                'default'        => null
+            ],
+            'minimum'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
                 'null'          => true,
@@ -38,8 +59,9 @@ class Products extends Migration
             ],
             'state'    => [
                 'type'          => 'TINYINT',
-                'constraint'    => '2',
-                'default'        => '1'
+                'constraint'    => '1',
+                'default'        => '1',
+                'null'          => true,
             ],
             'user_id'    => [
                 'type'           => 'BIGINT',

@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Users extends Migration
+class TempPurchase extends Migration
 {
-    protected $name = 'users';
+    protected $name = 'temp_purchase';
 
     public function up()
     {
@@ -17,58 +17,48 @@ class Users extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'name'    => [
+            'code'    => [
                 'type'          => 'VARCHAR',
-                'constraint'    => '75',
+                'constraint'    => '50',
+                'null'          => false,
             ],
-            'surname'    => [
+            'details'    => [
                 'type'          => 'VARCHAR',
-                'constraint'    => '75',
+                'constraint'    => '50',
+                'null'          => false,
+            ],
+            'cost'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'photo'    => [
-                'type'          => 'VARCHAR',
-                'constraint'    => '255',
-                'default'       => 'profile_default'
-            ],
-            'address'    => [
-                'type'          => 'TEXT',
+            'quantity'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
                 'null'          => true,
             ],
-            'phone'    => [
-                'type'          => 'VARCHAR',
-                'constraint'    => '75',
+            'subtotal'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'state'    => [
-                'type'          => 'TINYINT',
-                'constraint'    => '1',
-                'default'        => '1',
-                'null'          => true,
-            ],
-            'last_login'    => [
-                'type'          => 'DATETIME',
-                'null'          => true,
-            ],
-            'auth_id'    => [
+            'purchase_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
             ],
-            'rol_id'    => [
+            'product_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
-                'unsigned'       => true,
-                'default'        => '1'
+                'unsigned'       => true
             ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
-        $this->forge->addForeignKey('rol_id', 'rols', 'id', 'cascade', 'cascade');
-        $this->forge->addForeignKey('auth_id', 'auth', 'id', 'cascade', 'cascade');
-        $this->forge->addUniqueKey('auth_id');
+        $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('purchase_id', 'purchases', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

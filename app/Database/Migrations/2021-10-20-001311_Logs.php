@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Tempdetailsinvoice extends Migration
+class Logs extends Migration
 {
-    protected $name = 'temp_details_invoice';
+    protected $name = 'logs';
 
     public function up()
     {
@@ -17,27 +17,25 @@ class Tempdetailsinvoice extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'token'    => [
+            'ip'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '50',
                 'null'          => false,
             ],
-            'price'    => [
+            'event'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'quantity'    => [
+            'agent_user'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
                 'null'          => true,
             ],
-            'state'    => [
-                'type'          => 'TINYINT',
-                'constraint'    => '2',
-                'default'        => '1'
+            'details'    => [
+                'type'          => 'TEXT',
             ],
-            'product_id'    => [
+            'user_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
@@ -47,7 +45,7 @@ class Tempdetailsinvoice extends Migration
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
-        $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 
