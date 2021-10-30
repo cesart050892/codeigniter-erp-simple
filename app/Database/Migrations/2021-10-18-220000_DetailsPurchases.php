@@ -37,6 +37,16 @@ class DetailsPurchases extends Migration
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
+            'total'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'purchase_id'    => [
+                'type'           => 'BIGINT',
+                'constraint'     => 11,
+                'unsigned'       => true
+            ],
             'product_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
@@ -48,6 +58,7 @@ class DetailsPurchases extends Migration
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('purchase_id', 'purchases', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

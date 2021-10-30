@@ -27,11 +27,6 @@ class DetailsSales extends Migration
                 'constraint'    => '50',
                 'null'          => false,
             ],
-            'product_id'    => [
-                'type'           => 'BIGINT',
-                'constraint'     => 11,
-                'unsigned'       => true
-            ],
             'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
@@ -42,18 +37,28 @@ class DetailsSales extends Migration
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'user_id'    => [
+            'total'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'sale_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
             ],
+            'product_id'    => [
+                'type'           => 'BIGINT',
+                'constraint'     => 11,
+                'unsigned'       => true
+            ]
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('sale_id', 'sales', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

@@ -90,8 +90,13 @@ class Purchases extends ResourceController
             'supplier_id'   => $this->request->getPost('supplier'),
             'user_id'       => session()->user_id
         ]);
-        if (!$this->model->save($this->entity))
+        if (!$id = $this->model->save($this->entity))
             return $this->failValidationErrors($this->validator->listErrors());
+        $this->temp->where('hash', $folio)->delete();
+        $this->temp->purgeDeleted();
+        foreach ($products as $product) {
+            
+        }
         return $this->respond([
             'data'  => [
                 'folio'         => $folio,
