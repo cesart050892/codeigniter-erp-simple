@@ -51,18 +51,8 @@ class TempPurchases extends Model
 
     public function alreadyExist($product = null, $hash)
     {
-        return $this->select()
-            ->where('hash', $hash)
+        return $this->where('hash', $hash)
             ->where('product_id', $product)
             ->first();
-    }
-
-    public function updateQuantity($entity)
-    {
-        $this->set('quantity', $entity->quantity);
-        $this->set('subtotal', $entity->subtotal);
-        $this->where('producto_id', $entity->product_id);
-        $this->where('hash', $entity->hash);
-        $this->update();
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Products;
 use App\Models\Settings;
 use CodeIgniter\RESTful\ResourceController;
 
+use function PHPUnit\Framework\returnSelf;
+
 class TempPurchases extends ResourceController
 {
 
@@ -72,20 +74,30 @@ class TempPurchases extends ResourceController
         $quantity = $this->request->getPost('quantity');
         $iva = $this->settings->option('iva')->value;
         $this->entity->product_id = $this->request->getPost('product');
-        $product = $this->product->find($this->entity->product_id);
-        if ($this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
-            $this->entity->quantity = $product->quantity + $quantity;
+        if (!$product = $this->product->find($this->entity->product_id))
+            return $this->failNotFound('Product doesn\'t exist!');
+        if ($result = $this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
+            $this->entity = $result;
+            $this->entity->quantity += $quantity;
             $this->entity->subtotal = $this->entity->quantity * $product->price;
-            $this->entity->$iva = $this->entity->subtotal * $iva;
-            $this->model->updateQuantity($this->entity);
+            $this->entity->fill([
+                'iva' =>  $this->entity->subtotal * $iva
+            ]);
         else :
             $this->entity->quantity = $quantity;
             $this->entity->subtotal = $this->entity->quantity * $product->price;
             $this->entity->fill([
                 'iva' =>  $this->entity->subtotal * $iva
             ]);
-            $this->model->save($this->entity);
         endif;
+        if ($this->entity->quantity <= 0) {
+            if ($this->entity->id)
+                $this->model->delete($this->entity->id);
+                $this->model->purgeDeleted();
+            return $this->failValidationErrors('This quantity is lower than zero!');
+        }
+        if (!$this->model->save($this->entity))
+            return $this->failValidationErrors($this->model->validator->ListErrors());
         return $this->respond([
             'message'   => 'save purchase folio',
             'data'      => [

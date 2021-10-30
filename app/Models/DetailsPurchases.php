@@ -4,23 +4,23 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Purchases extends Model
+class DetailsPurchases extends Model
 {
     protected $DBGroup              = 'default';
-    protected $table                = 'purchases';
+    protected $table                = 'details_purchases';
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\Purchases::class;
+    protected $returnType           = \App\Entities\DetailsPurchases::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
     protected $allowedFields        = [
         'folio',
-        'iva',
+        'details',
+        'quantity',
         'subtotal',
-        'total',
-        'user_id',
-        'supplier_id'
+        'iva',
+        'product_id',
     ];
 
     // Dates
@@ -46,4 +46,23 @@ class Purchases extends Model
     protected $afterFind            = [];
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
+
+    // Functions
+
+    public function alreadyExist($product = null, $hash)
+    {
+        return $this->select()
+            ->where('hash', $hash)
+            ->where('product_id', $product)
+            ->first();
+    }
+
+    public function updateQuantity($entity)
+    {
+        $this->set('quantity', $entity->quantity);
+        $this->set('subtotal', $entity->subtotal);
+        $this->where('producto_id', $entity->product_id);
+        $this->where('hash', $entity->hash);
+        $this->update();
+    }
 }

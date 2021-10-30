@@ -53,6 +53,7 @@ class TempPurchases extends Migration
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addUniqueKey(['product_id', 'hash']);
         $this->forge->createTable($this->name);
     }
 
