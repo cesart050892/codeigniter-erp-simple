@@ -17,6 +17,16 @@ class Purchases extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'iva'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'subtotal'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
@@ -28,12 +38,16 @@ class Purchases extends Migration
                 'null'          => false,
                 'default'       => 1
             ],
-            'purchase_id'    => [
+            'folio'    => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 200,
+            ],
+            'user_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
             ],
-            'user_id'    => [
+            'supplier_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
@@ -43,6 +57,7 @@ class Purchases extends Migration
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
+        $this->forge->addForeignKey('supplier_id', 'suppliers', 'id', 'cascade', 'cascade');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }

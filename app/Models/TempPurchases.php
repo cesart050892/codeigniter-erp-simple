@@ -4,17 +4,24 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PivotRols extends Model
+class TempPurchases extends Model
 {
     protected $DBGroup              = 'default';
-    protected $table                = 'pivot_rols';
+    protected $table                = 'temp_purchases';
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\PivotRols::class;
+    protected $returnType           = \App\Entities\TempPurchases::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
-    protected $allowedFields        = ['rol_id', 'section_id', 'permission_id'];
+    protected $allowedFields        = [
+        'hash',
+        'details',
+        'quantity',
+        'subtotal',
+        'product_id',
+        'iva'
+    ];
 
     // Dates
     protected $useTimestamps        = true;
@@ -40,20 +47,22 @@ class PivotRols extends Model
     protected $beforeDelete         = [];
     protected $afterDelete          = [];
 
-    public function getOne($id)
+    // Functions
+
+    public function alreadyExist($product = null, $hash)
     {
-        return $this->select('
-            pivot_rols_sections_permissions.id,
-            users.id AS `user`,
-            rols.rol,
-            permissions.permission,
-            sections.section
-        ')
-            ->join('rols', 'pivot_rols_sections_permissions.rol_id = rols.id')
-            ->join('permissions', 'pivot_rols_sections_permissions.permission_id = permissions.id')
-            ->join('sections', 'pivot_rols_sections_permissions.section_id = sections.id')
-            ->join('users', 'rols.id = users.rol_id')
-            ->where('users.id', $id)
-            ->findAll();
+        return $this->select()
+            ->where('hash', $hash)
+            ->where('product_id', $product)
+            ->first();
+    }
+
+    public function updateQuantity($entity)
+    {
+        $this->set('quantity', $entity->quantity);
+        $this->set('subtotal', $entity->subtotal);
+        $this->where('producto_id', $entity->product_id);
+        $this->where('hash', $entity->hash);
+        $this->update();
     }
 }

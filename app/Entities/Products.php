@@ -12,5 +12,8 @@ class Products extends Entity
         'updated_at',
         'deleted_at',
     ];
-    protected $casts   = [];
+    protected $casts   = [
+        'price'          => 'double',
+        'cost'          => 'double',
+    ];
 }

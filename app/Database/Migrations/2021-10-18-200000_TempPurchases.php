@@ -37,6 +37,11 @@ class TempPurchases extends Migration
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
+            'iva'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'product_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,

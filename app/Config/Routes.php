@@ -42,6 +42,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
         $routes->get('logout', 'Auth::logout', ['filter' => 'api']);
     });
 
+    $routes->resource('temp/purchase',  ['controller' => 'TempPurchases', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+
     $routes->get('profile', 'Users::profile', ['filter' => 'api']);
     $routes->post('purchases/add/(:num)', 'Products::updatePrice/$1', ['filter' => 'api']);
     $routes->get('settings/(:segment)', 'Settings::option/$1', ['filter' => 'api']);
@@ -53,7 +55,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->resource('products',   ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('purchases',  ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('settings',   ['placeholder' => '(:num)', 'filter' => 'api', 'websafe' => 1]);
-    $routes->resource('temp',       ['controller' => 'TempDetailsInvoice', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    
+    $routes->resource('temp/sale',      ['controller' => 'TempSales', 'filter' => 'api:admin,guest', 'websafe' => 1]);
 });
 
 /*

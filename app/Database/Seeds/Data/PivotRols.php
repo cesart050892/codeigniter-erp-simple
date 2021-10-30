@@ -4,7 +4,7 @@ namespace App\Database\Seeds\Data;
 
 use CodeIgniter\Database\Seeder;
 
-class PivotRolsSectionsPermissions extends Seeder
+class PivotRols extends Seeder
 {
     public function run()
     {
