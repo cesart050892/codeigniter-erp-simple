@@ -37,7 +37,7 @@ $routes->get('/', 'Home::index');
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
 
     $routes->group('auth', function ($routes) {
-        $routes->post('signup', 'Auth::store');
+        $routes->post('signup', 'Auth::create');
         $routes->post('login', 'Auth::login');
         $routes->get('logout', 'Auth::logout', ['filter' => 'api']);
     });

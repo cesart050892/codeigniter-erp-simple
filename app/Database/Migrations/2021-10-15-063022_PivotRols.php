@@ -6,7 +6,7 @@ use CodeIgniter\Database\Migration;
 
 class PivotRols extends Migration
 {
-    protected $name = 'pivot_rols_sections_permissions';
+    protected $name = 'pivot_rols';
 
     public function up()
     {

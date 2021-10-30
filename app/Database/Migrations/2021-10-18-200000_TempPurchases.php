@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class DetailsPurchases extends Migration
+class TempPurchases extends Migration
 {
-    protected $name = 'details_purchases';
+    protected $name = 'temp_purchases';
 
     public function up()
     {
@@ -17,25 +17,25 @@ class DetailsPurchases extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'details'    => [
+            'hash'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '50',
                 'null'          => false,
             ],
-            'cost'    => [
-                'type'          => 'DOUBLE',
-                'constraint'    => '10,2',
-                'null'          => true,
+            'details'    => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '50',
+                'null'          => false,
             ],
             'quantity'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
                 'null'          => true,
             ],
-            'purchase_id'    => [
-                'type'           => 'BIGINT',
-                'constraint'     => 11,
-                'unsigned'       => true
+            'subtotal'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
             ],
             'product_id'    => [
                 'type'           => 'BIGINT',
@@ -48,7 +48,6 @@ class DetailsPurchases extends Migration
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
-        $this->forge->addForeignKey('purchase_id', 'purchases', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

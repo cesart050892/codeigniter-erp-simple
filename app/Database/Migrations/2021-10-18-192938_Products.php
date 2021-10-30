@@ -42,15 +42,15 @@ class Products extends Migration
                 'default'        => '0'
             ],
             'non_inventoriable'    => [
-                'type'          => 'INT',
-                'constraint'    => '10',
+                'type'          => 'TINYINT',
+                'constraint'    => '1',
                 'null'          => true,
                 'default'        => null
             ],
             'minimum'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
-                'null'          => true,
+                'null'          => false,
                 'default'        => '1'
             ],
             'photo'    => [
@@ -71,7 +71,8 @@ class Products extends Migration
             'supplier_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
-                'unsigned'       => true
+                'unsigned'       => true,
+                'null'           => true
             ],
         ]);
         $this->forge->addKey('id', true);

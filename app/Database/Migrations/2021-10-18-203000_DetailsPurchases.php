@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TempPurchases extends Migration
+class DetailsPurchases extends Migration
 {
-    protected $name = 'temp_purchases';
+    protected $name = 'details_purchases';
 
     public function up()
     {
@@ -17,7 +17,7 @@ class TempPurchases extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'code'    => [
+            'folio'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '50',
                 'null'          => false,
@@ -27,14 +27,14 @@ class TempPurchases extends Migration
                 'constraint'    => '50',
                 'null'          => false,
             ],
-            'cost'    => [
+            'product_id'    => [
+                'type'           => 'BIGINT',
+                'constraint'     => 11,
+                'unsigned'       => true
+            ],
+            'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => true,
-            ],
-            'quantity'    => [
-                'type'          => 'INT',
-                'constraint'    => '10',
                 'null'          => true,
             ],
             'subtotal'    => [
@@ -42,12 +42,7 @@ class TempPurchases extends Migration
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'purchase_id'    => [
-                'type'           => 'BIGINT',
-                'constraint'     => 11,
-                'unsigned'       => true
-            ],
-            'product_id'    => [
+            'user_id'    => [
                 'type'           => 'BIGINT',
                 'constraint'     => 11,
                 'unsigned'       => true
@@ -58,7 +53,7 @@ class TempPurchases extends Migration
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
-        $this->forge->addForeignKey('purchase_id', 'purchases', 'id', 'cascade', 'cascade');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

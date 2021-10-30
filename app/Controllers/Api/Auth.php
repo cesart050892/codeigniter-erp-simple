@@ -11,7 +11,12 @@ class Auth extends ResourceController
 {
     protected $modelName = 'App\Models\Auth';
 
-    public function store()
+    /**
+     * Create a new resource object, from "posted" parameters
+     *
+     * @return mixed
+     */
+    public function create()
     {
         $rules = [
             'name'              => 'required|min_length[2]|max_length[50]',
