@@ -54,20 +54,18 @@ class DetailsPurchases extends Model
 
     // Functions
 
-    public function alreadyExist($product = null, $hash)
+    public function byFolio($folio)
     {
-        return $this->select()
-            ->where('hash', $hash)
-            ->where('product_id', $product)
-            ->first();
-    }
-
-    public function updateQuantity($entity)
-    {
-        $this->set('quantity', $entity->quantity);
-        $this->set('subtotal', $entity->subtotal);
-        $this->where('producto_id', $entity->product_id);
-        $this->where('hash', $entity->hash);
-        $this->update();
+        return $this->select("
+            products.`code`, 
+            products.description, 
+            details_purchases.quantity, 
+            details_purchases.subtotal, 
+            details_purchases.iva, 
+            details_purchases.total
+        ")
+            ->join('products', 'details_purchases.product_id = products.id')
+            ->where('folio', $folio)
+            ->findAll();
     }
 }
