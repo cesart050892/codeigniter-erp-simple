@@ -27,6 +27,11 @@ class DetailsPurchases extends Migration
                 'constraint'    => '50',
                 'null'          => false,
             ],
+            'quantity'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
+                'null'          => true,
+            ],
             'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',

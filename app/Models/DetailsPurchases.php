@@ -20,6 +20,8 @@ class DetailsPurchases extends Model
         'quantity',
         'subtotal',
         'iva',
+        'total',
+        'purchase_id',
         'product_id',
     ];
 

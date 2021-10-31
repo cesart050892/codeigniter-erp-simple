@@ -75,12 +75,13 @@ class Purchases extends ResourceController
         $supplier = $this->request->getPost('supplier');
         if (!$supplier = $this->supplier->find($supplier))
             return $this->failNotFound('Supplier doesn\'t exist!.');
-        $products = $this->temp->where('hash', $folio)->findAll();
+        if (!$items = $this->temp->where('hash', $folio)->findAll())
+            return $this->failNotFound('Need to add items!.');
         $subtotal = 0;
         $iva = 0;
-        foreach ($products as $product) {
-            $iva +=  $product->iva;
-            $subtotal += $product->subtotal;
+        foreach ($items as $item) {
+            $iva +=  $item->iva;
+            $subtotal += $item->subtotal;
         }
         $this->entity->fill([
             'folio'           => $folio,
@@ -90,12 +91,25 @@ class Purchases extends ResourceController
             'supplier_id'   => $this->request->getPost('supplier'),
             'user_id'       => session()->user_id
         ]);
-        if (!$id = $this->model->save($this->entity))
+        if (!$this->model->insert($this->entity))
             return $this->failValidationErrors($this->validator->listErrors());
         $this->temp->where('hash', $folio)->delete();
         $this->temp->purgeDeleted();
-        foreach ($products as $product) {
-            
+        foreach ($items as $item) {
+            $product = $this->product->find($item->product_id);
+            $product->stock += $item->quantity;
+            $this->product->save($product);
+            $data = [
+                'folio' => $item->hash,
+                'details' => $item->details,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->subtotal,
+                'iva' => $item->iva,
+                'total' => $item->iva + $item->subtotal,
+                'purchase_id' => $this->model->insertID,
+                'product_id' => $product->id,
+            ];
+            $this->details->insert($data);
         }
         return $this->respond([
             'data'  => [

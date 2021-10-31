@@ -25,22 +25,27 @@ class DetailsSales extends Migration
             'details'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '50',
+                'null'          => true,
+            ],
+            'quantity'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
                 'null'          => false,
             ],
             'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => true,
+                'null'          => false,
             ],
             'subtotal'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => true,
+                'null'          => false,
             ],
             'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => true,
+                'null'          => false,
             ],
             'sale_id'    => [
                 'type'           => 'BIGINT',
