@@ -58,7 +58,6 @@ class TempPurchases extends ResourceController
     public function create()
     {
         $rules = [
-            'product'   =>  'required|integer',
             'quantity'  =>  'required|integer',
             'price'     =>  'required|decimal',
             'iva'       =>  'required'
@@ -73,9 +72,16 @@ class TempPurchases extends ResourceController
         $quantity = $this->request->getPost('quantity');
         $iva = $this->request->getPost('iva');
         $iva === 'true' ? $iva = $this->settings->option('iva')->value : $iva = 0;
-        $this->entity->product_id = $this->request->getPost('product');
-        if (!$product = $this->product->find($this->entity->product_id))
-            return $this->failNotFound('Product doesn\'t exist!');
+        if (!$this->request->getPost('code')) {
+            $this->entity->product_id = $this->request->getPost('product');
+            if (!$product = $this->product->find($this->entity->product_id))
+                return $this->failNotFound('Product doesn\'t exist!');
+        } else {
+            $code = $this->request->getPost('code');
+            if (!$product = $this->product->where('code', $code)->first())
+                return $this->failNotFound('Product doesn\'t exist!');
+            $this->entity->product_id = $product->id;
+        }
         $this->entity->price = $this->request->getPost('price');
         if ($result = $this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
             $this->entity = $result;
