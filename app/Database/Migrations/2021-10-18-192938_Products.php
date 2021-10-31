@@ -41,6 +41,11 @@ class Products extends Migration
                 'null'          => true,
                 'default'        => '0'
             ],
+            'total'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'non_inventoriable'    => [
                 'type'          => 'TINYINT',
                 'constraint'    => '1',
@@ -68,19 +73,12 @@ class Products extends Migration
                 'constraint'     => 11,
                 'unsigned'       => true
             ],
-            'supplier_id'    => [
-                'type'           => 'BIGINT',
-                'constraint'     => 11,
-                'unsigned'       => true,
-                'null'           => true
-            ],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('user_id', 'users', 'id', 'cascade', 'cascade');
-        $this->forge->addForeignKey('supplier_id', 'suppliers', 'id', 'cascade', 'cascade');
         $this->forge->createTable($this->name);
     }
 

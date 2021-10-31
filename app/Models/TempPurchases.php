@@ -18,9 +18,11 @@ class TempPurchases extends Model
         'hash',
         'details',
         'quantity',
+        'price',
         'subtotal',
+        'iva',
+        'total',
         'product_id',
-        'iva'
     ];
 
     // Dates

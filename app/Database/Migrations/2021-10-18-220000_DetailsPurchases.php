@@ -27,6 +27,11 @@ class DetailsPurchases extends Migration
                 'constraint'    => '50',
                 'null'          => false,
             ],
+            'price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'quantity'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
@@ -45,6 +50,16 @@ class DetailsPurchases extends Migration
             'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'new_price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'new_stock'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
                 'null'          => true,
             ],
             'purchase_id'    => [

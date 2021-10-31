@@ -17,10 +17,13 @@ class DetailsPurchases extends Model
     protected $allowedFields        = [
         'folio',
         'details',
+        'price',
         'quantity',
         'subtotal',
         'iva',
         'total',
+        'new_price',
+        'new_stock',
         'purchase_id',
         'product_id',
     ];

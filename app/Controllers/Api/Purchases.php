@@ -98,21 +98,27 @@ class Purchases extends ResourceController
         foreach ($items as $item) {
             $product = $this->product->find($item->product_id);
             $product->stock += $item->quantity;
+            $product->total += $item->total;
+            $product->cost = $product->total / $product->stock;
             $this->product->save($product);
             $data = [
                 'folio' => $item->hash,
                 'details' => $item->details,
+                'price' => $item->price,
                 'quantity' => $item->quantity,
                 'subtotal' => $item->subtotal,
                 'iva' => $item->iva,
-                'total' => $item->iva + $item->subtotal,
+                'total' => $item->total,
+                'new_price' => $product->cost,
+                'new_stock' => $product->stock,
                 'purchase_id' => $this->model->insertID,
                 'product_id' => $product->id,
             ];
             $this->details->insert($data);
         }
         return $this->respond([
-            'data'  => [
+            'message'   => 'Now you must be add new sales price',
+            'data'      => [
                 'folio'         => $folio,
                 'supplier'      => $supplier->name,
                 'subtotal'      => number_format($subtotal, 2, '.', ','),

@@ -19,12 +19,15 @@ class Products extends Model
     protected $allowedFields        = [
         'code',
         'description',
+        'cost',
         'price',
         'stock',
+        'total',
+        'non_inventoriable',
+        'minimum',
         'photo',
         'state',
-        'user_id',
-        'supplier_id'
+        'user_id'
     ];
 
     // Dates

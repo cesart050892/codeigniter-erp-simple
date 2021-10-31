@@ -14,26 +14,26 @@ class Products extends Seeder
         $data = [
             [
                 "description" => "Coca Cola 500 ml",
-                "cost"   => 13,
-                "price"   => 17,
+                "cost"   => 11,
                 "stock"   => 100,
-                "supplier_id"    => 1,
+                "total"   => 11 * 100,
+                "price"   => 16,
                 "user_id"   => 1
             ],
             [
                 "description" => "Pepsi 500 ml",
                 "cost"   => 12,
-                "price"   => 16,
                 "stock"   => 100,
-                "supplier_id"    => 1,
+                "total"   => 12 * 100,
+                "price"   => 16,
                 "user_id"   => 1
             ],
             [
                 "description" => "7up 500 ml",
-                "cost"   => 11,
-                "price"   => 15,
+                "cost"   => 13,
                 "stock"   => 100,
-                "supplier_id"    => 1,
+                "total"   => 13 * 100,
+                "price"   => 16,
                 "user_id"   => 1
             ],
         ];

@@ -32,12 +32,22 @@ class TempPurchases extends Migration
                 'constraint'    => '10',
                 'null'          => true,
             ],
+            'price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'subtotal'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
             'iva'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,

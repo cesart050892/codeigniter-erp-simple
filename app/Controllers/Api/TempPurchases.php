@@ -60,10 +60,11 @@ class TempPurchases extends ResourceController
     public function create()
     {
         $rules = [
-            'product'   =>  'required',
-            'quantity'  =>  'required'
+            'product'   =>  'required|integer',
+            'quantity'  =>  'required|integer',
+            'price'     =>  'required|decimal',
+            'iva'       =>  'required'
         ];
-
         if (!$this->validate($rules))
             return $this->failValidationErrors($this->validator->listErrors());
         if ($this->request->getPost('folio') != null) :
@@ -72,37 +73,44 @@ class TempPurchases extends ResourceController
             $this->entity->hash = uniqid();
         endif;
         $quantity = $this->request->getPost('quantity');
-        $iva = $this->settings->option('iva')->value;
+        $iva = $this->request->getPost('iva');
+        $iva === 'true' ? $iva = $this->settings->option('iva')->value : $iva = 0;
         $this->entity->product_id = $this->request->getPost('product');
-        if (!$product = $this->product->find($this->entity->product_id))
+        if (!$this->product->find($this->entity->product_id))
             return $this->failNotFound('Product doesn\'t exist!');
+        $this->entity->price = $this->request->getPost('price');
         if ($result = $this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
             $this->entity = $result;
             $this->entity->quantity += $quantity;
-            $this->entity->subtotal = $this->entity->quantity * $product->price;
+            $this->entity->subtotal = $this->entity->quantity * $this->entity->price;
             $this->entity->fill([
                 'iva' =>  $this->entity->subtotal * $iva
             ]);
+            $this->entity->total = $this->entity->subtotal * (1 + $iva);
         else :
             $this->entity->quantity = $quantity;
-            $this->entity->subtotal = $this->entity->quantity * $product->price;
+            $this->entity->subtotal = $this->entity->quantity * $this->entity->price;
             $this->entity->fill([
                 'iva' =>  $this->entity->subtotal * $iva
             ]);
+            $this->entity->total = $this->entity->subtotal * (1 + $iva);
         endif;
         if ($this->entity->quantity <= 0) {
             if ($this->entity->id)
                 $this->model->delete($this->entity->id);
-                $this->model->purgeDeleted();
+            $this->model->purgeDeleted();
             return $this->failValidationErrors('This quantity is lower than zero!');
         }
+
         if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->validator->ListErrors());
         return $this->respond([
             'message'   => 'save purchase folio',
             'data'      => [
                 'folio'  => $this->entity->hash,
-                'subtotal'  => $this->entity->subtotal
+                'subtotal'  => $this->entity->subtotal,
+                'iva'  => $this->entity->iva,
+                'total'  => $this->entity->total
             ]
         ]);
     }
