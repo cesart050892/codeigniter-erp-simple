@@ -7,8 +7,6 @@ use App\Models\Products;
 use App\Models\Settings;
 use CodeIgniter\RESTful\ResourceController;
 
-use function PHPUnit\Framework\returnSelf;
-
 class TempPurchases extends ResourceController
 {
 
@@ -76,7 +74,7 @@ class TempPurchases extends ResourceController
         $iva = $this->request->getPost('iva');
         $iva === 'true' ? $iva = $this->settings->option('iva')->value : $iva = 0;
         $this->entity->product_id = $this->request->getPost('product');
-        if (!$this->product->find($this->entity->product_id))
+        if (!$product = $this->product->find($this->entity->product_id))
             return $this->failNotFound('Product doesn\'t exist!');
         $this->entity->price = $this->request->getPost('price');
         if ($result = $this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
@@ -107,10 +105,11 @@ class TempPurchases extends ResourceController
         return $this->respond([
             'message'   => 'save purchase folio',
             'data'      => [
-                'folio'  => $this->entity->hash,
+                'folio'     => $this->entity->hash,
+                'product'   => $product->description,
                 'subtotal'  => $this->entity->subtotal,
-                'iva'  => $this->entity->iva,
-                'total'  => $this->entity->total
+                'iva'       => $this->entity->iva,
+                'total'     => $this->entity->total
             ]
         ]);
     }

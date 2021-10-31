@@ -3,19 +3,19 @@
 namespace App\Controllers\Api;
 
 use App\Entities\Products as EntitiesProducts;
-use App\Entities\Purchases as EntitiesPurchases;
-use App\Models\Purchases as ModelPurchases;
+use App\Models\Purchases;
 use CodeIgniter\RESTful\ResourceController;
 
 class Products extends ResourceController
 {
 
     protected $modelName = 'App\Models\Products';
-    protected $modelPurchase;
+    protected $entity, $purchase;
 
     public function __construct()
     {
-        $this->modelPurchase = new ModelPurchases();
+        $this->entity = new EntitiesProducts();
+        $this->purchases = new Purchases();
     }
 
 
@@ -67,36 +67,28 @@ class Products extends ResourceController
     public function create()
     {
         $rules = [
-            'description'       => 'min_length[2]|max_length[50]',
-            'price'             => 'required',
-            'supplier'          => 'required',
+            'description'   => 'min_length[2]|max_length[100]',
+            'code'   => 'min_length[2]|max_length[100]',
         ];
         $messages =     [
             'description' => [
+                'min_length' => 'Supplied value ({value}) for /{field}/ must have at least {param} characters.',
+                'max_length' => 'Supplied value ({value}) for /{field}/ must have max. {param} characters.'
+            ],
+            'code' => [
                 'min_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.',
-                'max_length' => 'Supplied value ({value}) for {field} must have at least {param} characters.'
+                'max_length' => 'Supplied value ({value}) for {field} must have max. {param} characters.'
             ]
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        $product = new EntitiesProducts();
-        $product->fill($this->request->getPost(['description', 'price'], FILTER_SANITIZE_STRING));
-        $product->supplier_id = $this->request->getPost('supplier');
-        if ($data = $this->request->getPost('stock')) {
-            $product->stock = $data;
-            unset($data);
-        } else {
-            $product->stock = 1;
-        }
-        $product->user_id = session()->user_id;
-        if (!$this->model->save($product))
+        $this->entity->fill($this->request->getPost(['description', 'code'], FILTER_SANITIZE_STRING));
+        $this->entity->user_id = session()->user_id;
+        if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->listErrors());
-        $product = $this->model->find($this->model->insertID());
-        if (!$this->addPurchases($product))
-            return $this->failValidationErrors($this->modelPurchase->listErrors());
         return $this->respondCreated([
             'message'   => 'created',
-            'data'      => $product
+            'data'      => $this->entity->description
         ]);
     }
 
@@ -161,53 +153,4 @@ class Products extends ResourceController
         ));
     }
 
-    protected function addPurchases(EntitiesProducts $entity)
-    {
-        $entityPurchase = new EntitiesPurchases();
-        $entityPurchase->fill([
-            'product_id'    => $entity->id,
-            'price'         => $entity->price,
-            'quantity'      => $entity->stock,
-            'user_id'         => $entity->user_id,
-        ]);
-        if (!$this->modelPurchase->save($entityPurchase))
-            return false;
-        return true;
-    }
-
-    public function updatePrice($id = null)
-    {
-        //
-        $rules = [
-            'quantity'       => 'required',
-            'price'             => 'required',
-        ];
-        if (!$this->validate($rules))
-            return $this->failValidationErrors($this->validator->listErrors());
-
-        $data = $this->request->getPost(['quantity', 'price']);
-        $data += [
-            'user_id'       => session()->user_id,
-            'product_id'    => $id
-        ];
-
-        $purchase = new EntitiesPurchases();
-        $purchase->fill($data);
-
-        $model = new ModelPurchases();
-        if (!$model->save($purchase))
-            return $this->failValidationErrors($model->listErrors());
-        
-        $product = $this->model->find($id);
-        $newTotal = ($product->price *  $product->stock) + ($data['quantity'] * $data['price']);
-        $product->stock = $product->stock + $data['quantity'];
-        $product->price = $newTotal / $product->stock;
-
-        if (!$this->model->save($product))
-            return $this->failValidationErrors($this->model->listErrors());
-        return $this->respondUpdated([
-            'message'   => 'updated',
-            'data'      => $product
-        ]);
-    }
 }
