@@ -59,7 +59,6 @@ class TempSales extends ResourceController
     {
         $rules = [
             'quantity'  =>  'required|integer',
-            'price'     =>  'required|decimal',
             'iva'       =>  'required'
         ];
         if (!$this->validate($rules))
@@ -82,7 +81,11 @@ class TempSales extends ResourceController
                 return $this->failNotFound('Product doesn\'t exist!');
             $this->entity->product_id = $product->id;
         }
-        $this->entity->price = $this->request->getPost('price');
+        if($this->request->getPost('price')) :
+            $this->entity->price = $this->request->getPost('price');// TODO
+        else :
+            $this->entity->price = $product->price;
+        endif;
         if ($result = $this->model->alreadyExist($this->entity->product_id, $this->entity->hash)) :
             $this->entity = $result;
             $this->entity->quantity += $quantity;

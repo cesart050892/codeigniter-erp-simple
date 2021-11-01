@@ -43,6 +43,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     });
 
     $routes->resource('temp/purchase',  ['controller' => 'TempPurchases', 'filter' => 'api:admin,guest', 'websafe' => 1]);
+    $routes->resource('temp/sale',  ['controller' => 'TempSales', 'filter' => 'api:admin,guest', 'websafe' => 1]);
 
     $routes->get('profile', 'Users::profile', ['filter' => 'api']);
     $routes->get('purchases/details/folio/(:segment)', 'DetailsPurchases::byFolio/$1', ['filter' => 'api']);

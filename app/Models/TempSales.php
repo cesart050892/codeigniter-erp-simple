@@ -11,14 +11,18 @@ class TempSales extends Model
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\Tempdetailsinvoice::class;
+    protected $returnType           = \App\Entities\TempSales::class;
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
     protected $allowedFields        = [
-        'token',
-        'price',
+        'hash',
+        'details',
         'quantity',
-        'product_id'
+        'price',
+        'subtotal',
+        'iva',
+        'total',
+        'product_id',
     ];
 
     // Dates
@@ -47,27 +51,10 @@ class TempSales extends Model
 
     // Functions
 
-    public function generate($token)
+    public function alreadyExist($product = null, $hash)
     {
-        return $this->select('
-            temp_details_invoice.token,
-            products.description,
-            temp_details_invoice.price,
-            temp_details_invoice.quantity,
-            users.`name`,
-            users.surname,
-            rols.rol 
-        ')
-            ->join('products', 'temp_details_invoice.product_id = products.id')
-            ->join('users', 'products.user_id = users.id')
-            ->join('rols', 'users.rol_id = rols.id')
-            ->where('token', $token)
-            ->findAll();
-    }
-
-    public function option($option)
-    {
-        return $this->where('option', $option)->first();
-        
+        return $this->where('hash', $hash)
+            ->where('product_id', $product)
+            ->first();
     }
 }
