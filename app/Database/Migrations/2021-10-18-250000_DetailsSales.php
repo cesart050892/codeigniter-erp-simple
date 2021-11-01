@@ -52,11 +52,6 @@ class DetailsSales extends Migration
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'new_price'    => [
-                'type'          => 'DOUBLE',
-                'constraint'    => '10,2',
-                'null'          => true,
-            ],
             'new_stock'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
