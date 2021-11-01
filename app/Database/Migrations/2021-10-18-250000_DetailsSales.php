@@ -6,7 +6,7 @@ use CodeIgniter\Database\Migration;
 
 class DetailsSales extends Migration
 {
-    protected $name = 'details_sales';
+    protected $name = 'details_Sales';
 
     public function up()
     {
@@ -25,27 +25,42 @@ class DetailsSales extends Migration
             'details'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '50',
+                'null'          => false,
+            ],
+            'price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
                 'null'          => true,
             ],
             'quantity'    => [
                 'type'          => 'INT',
                 'constraint'    => '10',
-                'null'          => false,
+                'null'          => true,
             ],
             'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => false,
+                'null'          => true,
             ],
             'subtotal'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => false,
+                'null'          => true,
             ],
             'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
-                'null'          => false,
+                'null'          => true,
+            ],
+            'new_price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'new_stock'    => [
+                'type'          => 'INT',
+                'constraint'    => '10',
+                'null'          => true,
             ],
             'sale_id'    => [
                 'type'           => 'BIGINT',

@@ -32,7 +32,22 @@ class TempSales extends Migration
                 'constraint'    => '10',
                 'null'          => true,
             ],
+            'price'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
             'subtotal'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'iva'    => [
+                'type'          => 'DOUBLE',
+                'constraint'    => '10,2',
+                'null'          => true,
+            ],
+            'total'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
@@ -48,6 +63,7 @@ class TempSales extends Migration
         $this->forge->addField("updated_at DATETIME NULL DEFAULT NULL");
         $this->forge->addField("deleted_at DATETIME NULL DEFAULT NULL");
         $this->forge->addForeignKey('product_id', 'products', 'id', 'cascade', 'cascade');
+        $this->forge->addUniqueKey(['product_id', 'hash']);
         $this->forge->createTable($this->name);
     }
 

@@ -17,12 +17,17 @@ class Sales extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'iva'    => [
+            'folio'    => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 200,
+                'unique'         => true
+            ],
+            'subtotal'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
             ],
-            'subtotal'    => [
+            'iva'    => [
                 'type'          => 'DOUBLE',
                 'constraint'    => '10,2',
                 'null'          => true,
@@ -37,10 +42,6 @@ class Sales extends Migration
                 'constraint'    => '1',
                 'null'          => false,
                 'default'       => 1
-            ],
-            'folio'    => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 200,
             ],
             'user_id'    => [
                 'type'           => 'BIGINT',
