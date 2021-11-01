@@ -98,7 +98,7 @@ class Sales extends ResourceController
         foreach ($items as $item) {
             $product = $this->product->find($item->product_id);
             $product->stock -= $item->quantity;
-            $product->total -= $item->subtotal;
+            $product->total -= ($item->quantity * $product->cost);
             $this->product->save($product);
             $data = [
                 'folio' => $item->hash,
@@ -119,7 +119,7 @@ class Sales extends ResourceController
             'message'   => 'Now you must be add new sales price',
             'data'      => [
                 'folio'         => $folio,
-                'supplier'      => $client->name,
+                'client'      => $client->name,
                 'subtotal'      => number_format($subtotal, 2, '.', ','),
                 'iva'           => number_format($iva, 2, '.', ','),
                 'total'         => number_format($iva + $subtotal, 2, '.', ','),
