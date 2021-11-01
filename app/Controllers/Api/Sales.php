@@ -98,8 +98,7 @@ class Sales extends ResourceController
         foreach ($items as $item) {
             $product = $this->product->find($item->product_id);
             $product->stock -= $item->quantity;
-            $product->total -= $item->total;
-            $product->cost = $product->total / $product->stock;
+            $product->total -= $item->subtotal;
             $this->product->save($product);
             $data = [
                 'folio' => $item->hash,
@@ -109,12 +108,12 @@ class Sales extends ResourceController
                 'subtotal' => $item->subtotal,
                 'iva' => $item->iva,
                 'total' => $item->total,
-                'new_price' => $product->cost,
                 'new_stock' => $product->stock,
-                'purchase_id' => $this->model->insertID,
+                'sale_id' => $this->model->insertID,
                 'product_id' => $product->id,
             ];
-            $this->details->insert($data);
+            if(!$this->details->insert($data))
+                return $this->failValidationErrors($this->details->validator->listErrors());
         }
         return $this->respond([
             'message'   => 'Now you must be add new sales price',

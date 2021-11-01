@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class DetailsSales extends Model
 {
     protected $DBGroup              = 'default';
-    protected $table                = 'detailssales';
+    protected $table                = 'details_sales';
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
