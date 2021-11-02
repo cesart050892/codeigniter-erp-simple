@@ -9,6 +9,12 @@ class Suppliers extends ResourceController
 {
 
     protected $modelName = 'App\Models\Suppliers';
+    protected $entity;
+
+    public function __construct()
+    {
+        $this->entity = new EntitiesSuppliers();
+    }
 
     /**
      * Return an array of resource objects, themselves in array format

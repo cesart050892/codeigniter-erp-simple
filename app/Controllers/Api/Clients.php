@@ -9,6 +9,12 @@ class Clients extends ResourceController
 {
 
     protected $modelName = 'App\Models\Clients';
+    protected $entity;
+
+    public function __construct()
+    {
+        $this->entity = new EntitiesClients();
+    }
 
     /**
      * Return an array of resource objects, themselves in array format
@@ -74,15 +80,14 @@ class Clients extends ResourceController
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        $client = new EntitiesClients();
-        $client->fill($this->request->getPost(['name', 'email', 'contact'], FILTER_SANITIZE_STRING));
-        $client->user_id = session()->user_id;
-        if (!$this->model->save($client))
+        $this->entity->fill($this->request->getPost(['name', 'email', 'contact'], FILTER_SANITIZE_STRING));
+        $this->entity->user_id = session()->user_id;
+        if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->listErrors());
-        $client = $this->model->find($this->model->insertID());
+        $this->entity = $this->model->find($this->model->insertID());
         return $this->respondCreated([
             'message'   => 'created',
-            'data'      => $client
+            'data'      => $this->entity
         ]);
     }
 

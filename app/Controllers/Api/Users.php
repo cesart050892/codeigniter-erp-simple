@@ -8,9 +8,11 @@ use CodeIgniter\RESTful\ResourceController;
 class Users extends ResourceController
 {
     protected $modelName = 'App\Models\Users';
+    protected $auth;
 
     public function __construct()
     {
+        $this->auth = new Auth();
         helper(['rol']);
     }
 
@@ -112,12 +114,11 @@ class Users extends ResourceController
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
         $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
-        $authModel = new Auth();
-        $auth = $authModel->find($user->auth_id);
+        $auth = $this->auth->find($user->auth_id);
         $auth->fill($this->request->getPost(['email', 'username'], FILTER_SANITIZE_STRING));
         if ($auth->hasChanged())
-            if (!$authModel->save($auth))
-                return $this->failValidationErrors($authModel->errors());
+            if (!$this->auth->save($auth))
+                return $this->failValidationErrors($this->auth->errors());
         if ($user->hasChanged())
             if (!$this->model->save($user))
                 return $this->failValidationErrors($this->model->errors());
@@ -150,9 +151,8 @@ class Users extends ResourceController
 
     protected function actionDelete($user)
     {
-        $model = new Auth();
-        if (!$model->delete($user->auth_id))
-            return $this->failValidationErrors($model->ListErrors());
-        $model->purgeDeleted();
+        if (!$this->auth->delete($user->auth_id))
+            return $this->failValidationErrors($this->auth->ListErrors());
+        $this->auth->purgeDeleted();
     }
 }

@@ -10,6 +10,7 @@ use CodeIgniter\RESTful\ResourceController;
 class Auth extends ResourceController
 {
     protected $modelName = 'App\Models\Auth';
+    protected $entity, $users;
 
     public function __construct()
     {
