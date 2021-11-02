@@ -11,6 +11,12 @@ class Auth extends ResourceController
 {
     protected $modelName = 'App\Models\Auth';
 
+    public function __construct()
+    {
+        $this->entity = new EntitiesAuth();
+        $this->users = new UsersModel();
+    }
+
     /**
      * Create a new resource object, from "posted" parameters
      *
@@ -39,17 +45,15 @@ class Auth extends ResourceController
         ];
         if (!$this->validate($rules, $messages))
             return $this->failValidationErrors($this->validator->listErrors());
-        $userModel  = new UsersModel();
-        $userEntity = new UsersEntity();
-        $authEntity = new EntitiesAuth();
-        $authEntity->fill($this->request->getPost(['username', 'email', 'password']));
-        if (!$this->model->save($authEntity))
+        $user = new UsersEntity();
+        $this->entity->fill($this->request->getPost(['username', 'email', 'password']));
+        if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->listErrors());
-        $userEntity->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
-        $userEntity->fill(['auth_id' => $this->model->insertID()]);
-        if (!$userModel->save($userEntity))
-            return $this->failValidationErrors($userModel->listErrors());
-        $user = $userModel->find($userModel->insertID());
+        $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
+        $user->fill(['auth_id' => $this->model->insertID()]);
+        if (!$this->users->save($user))
+            return $this->failValidationErrors($this->users->listErrors());
+        $user = $this->users->find($this->users->insertID());
         return $this->respondCreated([
             'message'   => 'created',
             'data'      => $user
@@ -58,7 +62,6 @@ class Auth extends ResourceController
 
     public function login()
     {
-        $userModel = new UsersModel();
         $username = $this->request->getPost('username', FILTER_SANITIZE_STRING);
         $password = $this->request->getPost('password', FILTER_SANITIZE_STRING);
         $auth = $this->model->where('username', $username)->first();
@@ -66,7 +69,7 @@ class Auth extends ResourceController
             return $this->failNotFound('Username does not exist.');
         if (!password_verify($password, $auth->password))
             return $this->failNotFound('Password is incorrect.');
-        $user = $userModel->where('auth_id', $auth->id)->first();
+        $user = $this->users->where('auth_id', $auth->id)->first();
         $data = [
             'name' => "{$user->name} {$user->surname}",
             'email' => $auth->email,
