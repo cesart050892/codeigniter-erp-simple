@@ -39,11 +39,12 @@ class Users extends Entity
     public function saveProfileImage(UploadedFile $image)
     {
         $new = $this->storeImage($image);
-        log_message('info',"File created: ".$new."For this User: ".$this->fullname);
+        log_message('info', "File created: " . $new . "For this User: " . $this->fullname);
         $file = $this->photo;
-        if ($file !== 'profile_default.png')
-            if(!$this->deleteImage($file))
-                log_message('error','Image was not delete');
+        if ($file !== null)
+            if ($file !== 'profile_default.png')
+                if (!$this->deleteImage($file))
+                    log_message('error', 'Image was not delete');
         return $new;
     }
 
@@ -53,7 +54,7 @@ class Users extends Entity
         if (!$image->isValid() || $image->hasMoved())
             return false;
         try {
-            $image->move(USERSIMG, $new);;
+            $image->move(APPIMGS . "users/", $new);;
         } catch (\Throwable $th) {
             return false;
         }
@@ -62,7 +63,7 @@ class Users extends Entity
 
     private function deleteImage(string $file): bool
     {
-        $path    = WRITEPATH.$file;
+        $path    = WRITEPATH . $file;
         if (!file_exists($path))
             return false;
         return unlink($path);

@@ -59,8 +59,9 @@ class Products extends Migration
                 'default'        => '1'
             ],
             'photo'    => [
-                'type'          => 'TEXT',
-                'null'          => true,
+                'type'          => 'VARCHAR',
+                'constraint'    => '255',
+                'default'       => 'default.png'
             ],
             'state'    => [
                 'type'          => 'TINYINT',
