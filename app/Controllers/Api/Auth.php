@@ -51,6 +51,8 @@ class Auth extends ResourceController
             return $this->failValidationErrors($this->validator->listErrors());
         $user = new UsersEntity();
         $this->entity->fill($this->request->getPost(['username', 'email', 'password']));
+        $db = db_connect();
+        $db->transBegin();
         if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->listErrors());
         $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
@@ -70,6 +72,8 @@ class Auth extends ResourceController
         if (!$this->users->save($user))
             return $this->failValidationErrors($this->users->listErrors());
         $user = $this->users->find($this->users->insertID());
+        $db->transComplete();
+        $db->close();
         return $this->respondCreated([
             'message'   => 'created',
             'data'      => $user
