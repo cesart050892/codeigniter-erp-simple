@@ -99,7 +99,10 @@ class Products extends ResourceController
             return $this->failValidationErrors($this->model->listErrors());
         return $this->respondCreated([
             'message'   => 'created',
-            'data'      => $this->entity->description
+            'data'      => [
+                'name' => $this->entity->description,
+                'photo' => $this->entity->photo
+            ]
         ]);
     }
 
