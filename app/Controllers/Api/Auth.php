@@ -63,6 +63,7 @@ class Auth extends ResourceController
                 }
             }
         }
+        $user->fullname = "{$user->name} {$user->surname}";
         if (!$this->users->save($user))
             return $this->failValidationErrors($this->users->listErrors());
         $user = $this->users->find($this->users->insertID());

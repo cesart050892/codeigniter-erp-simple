@@ -28,13 +28,6 @@ class Users extends Entity
     ];
     protected $casts   = [];
 
-    public function getFullname()
-    {
-        if ($this->attributes['name'] !== null) {
-            $this->attributes['fullname'] = "{$this->attributes['name']} {$this->attributes['surname']}";
-        }
-        return $this->attributes['fullname'];
-    }
 
     public function getPhoto()
     {
@@ -45,13 +38,9 @@ class Users extends Entity
 
     public function saveProfileImage(UploadedFile $image)
     {
-
         $new = $this->storeImage($image);
-
-        if ($this->photo !== USERSIMG . 'profile_default.jpg') {
+        if ($this->photo !== USERSIMG . 'profile_default.jpg')
             $this->deleteImage();
-        }
-
         return $new;
     }
 

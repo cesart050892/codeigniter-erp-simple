@@ -11,12 +11,13 @@ class Users extends Model
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\Users::class;
+    protected $returnType           = 'App\Entities\Users';
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
     protected $allowedFields        = [
         'name',
         'surname',
+        'fullname',
         'photo',
         'address',
         'phone',

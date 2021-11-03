@@ -26,6 +26,11 @@ class Users extends Migration
                 'constraint'    => '75',
                 'null'          => true,
             ],
+            'fullname'    => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '200',
+                'null'          => true,
+            ],
             'photo'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '255',
