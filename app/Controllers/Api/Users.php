@@ -56,6 +56,7 @@ class Users extends ResourceController
         //
         if (!$user = $this->model->getOne(session()->user_id))
             return $this->failNotFound('Username does not exist');
+        $user->getFullname();
         return $this->respond([
             'data'  => $user
         ]);
