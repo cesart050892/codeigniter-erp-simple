@@ -82,6 +82,17 @@ class Clients extends ResourceController
             return $this->failValidationErrors($this->validator->listErrors());
         $this->entity->fill($this->request->getPost(['name', 'email', 'contact'], FILTER_SANITIZE_STRING));
         $this->entity->user_id = session()->user_id;
+        if ($file = $this->request->getFile('image')) {
+            if ($this->validate([
+                "image" => 'is_image[image]|max_size[image,1024]|permit_empty'
+            ])) {
+                if ($file->isValid()) {
+                    if (!$name = $this->entity->saveImage($file))
+                        return $this->failValidationErrors('Image is no valid!');
+                    $this->entity->photo = $name;
+                }
+            }
+        }
         if (!$this->model->save($this->entity))
             return $this->failValidationErrors($this->model->listErrors());
         $this->entity = $this->model->find($this->model->insertID());

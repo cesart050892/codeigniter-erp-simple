@@ -45,6 +45,11 @@ class Clients extends Migration
                 'constraint'    => '75',
                 'null'          => true,
             ],
+            'photo'    => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '255',
+                'default'       => 'default.png'
+            ],
             'state'    => [
                 'type'          => 'TINYINT',
                 'constraint'    => '2',

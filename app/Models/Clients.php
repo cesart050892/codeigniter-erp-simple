@@ -11,7 +11,7 @@ class Clients extends Model
     protected $primaryKey           = 'id';
     protected $useAutoIncrement     = true;
     protected $insertID             = 0;
-    protected $returnType           = \App\Entities\Clients::class;
+    protected $returnType           = 'App\Entities\Clients';
     protected $useSoftDeletes       = true;
     protected $protectFields        = true;
     protected $allowedFields        = [
@@ -21,6 +21,7 @@ class Clients extends Model
         'address',
         'contact',
         'ruc',
+        'photo',
         'state',
         'user_id'
     ];

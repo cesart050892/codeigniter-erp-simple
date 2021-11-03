@@ -18,7 +18,7 @@ class Products extends Entity
     protected $dates   = [];
     protected $casts   = [
         'price'          => 'double',
-        'cost'          => 'double',
+        'cost'           => 'double',
     ];
 
     public function getPhoto()
