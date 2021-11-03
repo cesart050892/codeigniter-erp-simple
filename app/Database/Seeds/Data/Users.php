@@ -15,9 +15,10 @@ class Users extends Seeder
             [
                 'name'              => 'Cesar A.',
                 'surname'           => 'Tapia',
+                'fullname'          => 'Cesar A. Tapia',
                 'address'           => 'Managua, Nicaragua',
                 'rol_id'            => 2,
-                'auth_id'     => 1
+                'auth_id'           => 1
             ]
         ];
 
