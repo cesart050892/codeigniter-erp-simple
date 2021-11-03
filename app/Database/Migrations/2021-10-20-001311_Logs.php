@@ -23,14 +23,14 @@ class Logs extends Migration
                 'null'          => false,
             ],
             'event'    => [
-                'type'          => 'DOUBLE',
-                'constraint'    => '10,2',
-                'null'          => true,
+                'type'          => 'VARCHAR',
+                'constraint'    => '50',
+                'null'          => false,
             ],
             'agent_user'    => [
-                'type'          => 'INT',
-                'constraint'    => '10',
-                'null'          => true,
+                'type'          => 'VARCHAR',
+                'constraint'    => '50',
+                'null'          => false,
             ],
             'details'    => [
                 'type'          => 'TEXT',

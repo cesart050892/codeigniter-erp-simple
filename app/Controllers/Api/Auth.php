@@ -2,8 +2,10 @@
 
 namespace App\Controllers\Api;
 
+use CodeIgniter\I18n\Time;
 use App\Entities\Auth as EntitiesAuth;
 use App\Entities\Users as UsersEntity;
+use App\Models\Logs;
 use App\Models\Users as UsersModel;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -16,6 +18,7 @@ class Auth extends ResourceController
     {
         $this->entity = new EntitiesAuth();
         $this->users = new UsersModel();
+        $this->logs = new Logs();
     }
 
     /**
@@ -157,6 +160,18 @@ class Auth extends ResourceController
                 'user_email' => $auth->email,
                 'isLoggedIn' => TRUE
             ];
+            $user->last_login = Time::now()->humanize();
+            $this->users->save($user);
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            $this->logs->save([
+                'ip'            => $ip,
+                'event'         => 'login',
+                'details'       => $user->fullname . ' - ' . Time::now(),
+                'agent_user'    => $agent,
+                'user_id'       => $user->id
+            ]);
+            log_message('info', "Session: login (" . $ip . " // " . $agent . " // " . $user->fullname . ")");
             session()->set($data);
             return true;
         } else {
@@ -167,6 +182,17 @@ class Auth extends ResourceController
     public function logout()
     {
         session()->destroy();
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $agent = $_SERVER['HTTP_USER_AGENT'];
+        $user = $this->users->find(session()->user_id);
+        $this->logs->save([
+            'ip'            => $ip,
+            'event'         => 'logout',
+            'details'       => $user->fullname . ' - ' . Time::now(),
+            'agent_user'    => $agent,
+            'user_id'       => $user->id
+        ]);
+        log_message('info', "Session: logout (" . $ip . " // " . $agent . " // " . $user->fullname . ")");
         return $this->respond([
             'message'   => 'logout'
         ]);

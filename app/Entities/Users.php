@@ -43,7 +43,7 @@ class Users extends Entity
         $file = $this->photo;
         if ($file !== 'profile_default.png')
             if(!$this->deleteImage($file))
-                log_message(9,'Image was not delete');
+                log_message('error','Image was not delete');
         return $new;
     }
 
