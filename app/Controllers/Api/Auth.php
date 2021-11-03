@@ -73,6 +73,59 @@ class Auth extends ResourceController
         ]);
     }
 
+    /**
+     * Update a new resource object, from "posted" parameters
+     *
+     * @return mixed
+     */
+    public function update($id = null)
+    {
+        $rules = [
+            'name'              => 'required|min_length[2]|max_length[50]',
+            'surname'           => 'required|min_length[2]|max_length[50]',
+            'username'          => 'required|min_length[2]|max_length[50]',
+            'email'             => "required|min_length[4]|max_length[100]|valid_email|is_unique[auth.email,id,{$id}]",
+        ];
+        $messages =     [
+            'username' => [
+                'required' => 'All accounts must have {field} provided',
+            ],
+            'surname' => [
+                'required' => 'All accounts must have {field} provided'
+            ]
+        ];
+        if (!$this->validate($rules, $messages))
+            return $this->failValidationErrors($this->validator->listErrors());
+        $user = $this->users->find($id);
+        $this->entity = $this->model->find($user->auth_id);
+        $this->entity->fill($this->request->getPost(['username', 'email']));
+        if ($this->entity->hasChanged()) {
+            if (!$this->model->save($this->entity))
+                return $this->failValidationErrors($this->model->listErrors());
+        }
+        $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
+        $user->fullname = "{$user->name} {$user->surname}";
+        if ($file = $this->request->getFile('image')) {
+            if ($this->validate([
+                "image" => 'is_image[image]|max_size[image,1024]|permit_empty'
+            ])) {
+                if ($file->isValid()) {
+                    if (!$name = $user->saveProfileImage($file))
+                        return $this->failValidationErrors('Image is no valid!');
+                    $user->photo = $name;
+                }
+            }
+        }
+        if ($user->hasChanged()) {
+            if (!$data = $this->users->save($user))
+                return $this->failValidationErrors($this->users->listErrors());
+        }
+        return $this->respondCreated([
+            'message'   => 'created',
+            'data'      => $user
+        ]);
+    }
+
     public function login()
     {
         $username = $this->request->getPost('username', FILTER_SANITIZE_STRING);
