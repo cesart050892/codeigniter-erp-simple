@@ -52,6 +52,17 @@ class Auth extends ResourceController
             return $this->failValidationErrors($this->model->listErrors());
         $user->fill($this->request->getPost(['name', 'surname'], FILTER_SANITIZE_STRING));
         $user->fill(['auth_id' => $this->model->insertID()]);
+        if ($file = $this->request->getFile('image')) {
+            if ($this->validate([
+                "image" => 'is_image[image]|max_size[image,1024]|permit_empty'
+            ])) {
+                if ($file->isValid()) {
+                    if (!$name = $user->saveProfileImage($file))
+                        return $this->failValidationErrors('Image is no valid!');
+                    $user->photo = $name;
+                }
+            }
+        }
         if (!$this->users->save($user))
             return $this->failValidationErrors($this->users->listErrors());
         $user = $this->users->find($this->users->insertID());

@@ -29,7 +29,7 @@ class Users extends Migration
             'photo'    => [
                 'type'          => 'VARCHAR',
                 'constraint'    => '255',
-                'default'       => 'profile_default'
+                'default'       => 'profile_default.png'
             ],
             'address'    => [
                 'type'          => 'TEXT',

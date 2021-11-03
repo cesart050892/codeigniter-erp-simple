@@ -1,0 +1,8 @@
+
+WIN
+
+mklink /d C:\laragon\www\codeigniter-erp-simple\public\uploads C:\laragon\www\codeigniter-erp-simple\writable\uploads
+
+LINUX
+
+ln -s /var/ww/writable/uploads /var/www/codeigniter-erp-simple/public/uploads

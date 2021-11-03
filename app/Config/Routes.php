@@ -44,13 +44,13 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 
     $routes->resource('temp/purchase',  ['controller' => 'TempPurchases', 'filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('temp/sale',      ['controller' => 'TempSales', 'filter' => 'api:admin,guest', 'websafe' => 1]);
-
-    $routes->get('profile', 'Users::profile', ['filter' => 'api']);
     
     $routes->get('purchases/details/folio/(:segment)', 'DetailsPurchases::byFolio/$1', ['filter' => 'api']);
+    $routes->post('users/update/(:num)', 'Auth::update/$1', ['filter' => 'api']);
+
+    $routes->get('profile', 'Users::profile', ['filter' => 'api']);
     $routes->get('settings/(:segment)', 'Settings::option/$1', ['filter' => 'api']);
 
-    $routes->get('temp/generate(:any)', 'TempDetailsInvoice::generate/$1', ['filter' => 'api']);
     
     $routes->resource('rols',       ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);
     $routes->resource('users',      ['placeholder' => '(:num)', 'filter' => 'api:admin,guest', 'websafe' => 1]);

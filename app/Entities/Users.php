@@ -18,43 +18,33 @@ class Users extends Entity
     public function saveProfileImage(UploadedFile $image)
     {
 
-        $newImage = $this->storeImage($image);
+        $new = $this->storeImage($image);
 
-        if ($this->img !== '/img/default/profile.jpg') {
+        if ($this->photo !== USERSIMG.'profile_default.jpg') {
             $this->deleteImage();
         }
 
-        return $newImage;
+        return $new;
     }
 
     private function storeImage(UploadedFile $image)
     {
-
-        $pathImage = "/img/users/{$this->nick}_{$image->getRandomName()}";
-
-        if (!$image->isValid() || $image->hasMoved()) {
-            return false;
-        }
-
-        try {
-            $image->move(".", $pathImage);
-        } catch (\Throwable $th) {
-            return false;
-        }
-
-        return $pathImage;
+		$new = $image->getRandomName(); 
+		if (!$image->isValid() || $image->hasMoved()) 
+			return false;
+		try {
+			$image->move(USERSIMG, $new);;
+		} catch (\Throwable $th) {
+			return false;
+		}
+		return $new;
     }
 
     private function deleteImage(): bool
     {
-
-        $baseDir = realpath($_SERVER["DOCUMENT_ROOT"]);
-        $file    = "{$baseDir}/{$this->img}";
-
-        if (!file_exists($file)) {
+        $file    = USERSIMG.'profile_default.jpg';
+        if (!file_exists($file)) 
             return false;
-        }
-
         return unlink($file);
     }
 }
