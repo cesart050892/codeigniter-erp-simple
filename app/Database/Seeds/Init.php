@@ -11,7 +11,7 @@ class Init extends Seeder
 		//
 		$this->call('App\Database\Seeds\Data\Settings');
 		$this->call('App\Database\Seeds\Data\Countries');
-
+		$this->call('App\Database\Seeds\Data\Currencies');
 		$this->call('App\Database\Seeds\Data\Companies');
 		$this->call('App\Database\Seeds\Data\CompaniesSettings');
 		$this->call('App\Database\Seeds\Data\Permissions');
