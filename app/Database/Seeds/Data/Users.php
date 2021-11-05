@@ -18,7 +18,8 @@ class Users extends Seeder
                 'fullname'          => 'Cesar A. Tapia',
                 'address'           => 'Managua, Nicaragua',
                 'rol_id'            => 2,
-                'auth_id'           => 1
+                'auth_id'           => 1,
+                'company_id'        => 1
             ]
         ];
 
